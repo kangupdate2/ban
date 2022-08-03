@@ -335,8 +335,6 @@ SENT : {sent} || RECV : {recv}\n
 ONGOING TASKS:
 DL: {num_active} || UP : {num_upload} || SPLIT : {num_split}
 ZIP : {num_archi} || UNZIP : {num_extract} || TOTAL : {tasks} 
-
-Budy Gamer
 """
     return stats
 dispatcher.add_handler(
