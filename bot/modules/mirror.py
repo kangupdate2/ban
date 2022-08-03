@@ -276,6 +276,7 @@ class MirrorListener:
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
                 msg += f'\n<b>SubFolders: </b>{folders}'
                 msg += f'\n<b>Files: </b>{files}'
+            msg += f"\n\n<b>Elapsed Time:</b> {get_readable_time(time() - self.elapsed_time)}"
             msg += f'\n\n<b>cc: </b>{self.tag}'
             buttons = ButtonMaker()
             buttons.buildbutton("☁️ Drive Link", link)
@@ -335,9 +336,9 @@ class MirrorListener:
                     pass
             else:
                 pass
-            balas = f"<b>Name: </b><code>{escape(name)}</code>\n <b> I Have Sent Your Files In Your PM</b>{self.tag}"
+            balas = f"<b>Name: </b><code>{escape(name)}</code>\n <b> I Have Sent Your Files In Your PM </b>{self.tag}"
             buttons.buildbutton(f"LOG DOWNLOAD", f"https://t.me/+iOmLoJkMhjk0Y2Rl")
-            uploadmsg = sendMarkup(balas, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
+            uploadmsg = sendMarkup(balas, self.bot, self.message)
             Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
             if MIRROR_LOGS:
                 try:
