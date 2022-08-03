@@ -339,6 +339,7 @@ class MirrorListener:
                 pass
             balas = f"<b>Name: </b><code>{escape(name)}</code>\n <b> I Have Sent Your Files In Your PM </b>{self.tag}"
             buttons.buildbutton(f"LOG DOWNLOAD", f"https://t.me/+iOmLoJkMhjk0Y2Rl")
+            sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(balas, self.bot, self.message)
             Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
             if MIRROR_LOGS:
