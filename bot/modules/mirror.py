@@ -337,8 +337,8 @@ class MirrorListener:
                     pass
             else:
                 pass
-            balas = f"<b>Name: </b><code>{escape(name)}</code>\n <b> I Have Sent Your Files In Your PM </b>{self.tag}"
-            balas += f'I Have Sent Files in <a href="https://t.me/+iOmLoJkMhjk0Y2Rl">LOG DOWNLOAD</a>'
+            balas = f"<code>{escape(name)}</code>\n\n <b>Download selesai</b> liat PM {self.tag}\n"
+            balas += f'File juga ada di <a href="https://t.me/+iOmLoJkMhjk0Y2Rl">LOG DOWNLOAD</a>'
             sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(balas, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
             Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
