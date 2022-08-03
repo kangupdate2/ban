@@ -335,7 +335,8 @@ class MirrorListener:
                     pass
             else:
                 pass
-            uploadmsg = sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
+            balas = 'I Have Sent Your Files In Your PM'
+            uploadmsg = sendMarkup(msg + balas, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
             Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
             if MIRROR_LOGS:
                 try:
