@@ -42,6 +42,7 @@ from bot.helper.ext_utils.telegraph_helper import telegraph
 class MirrorListener:
     def __init__(self, bot, message, isZip=False, extract=False, isQbit=False, isLeech=False, pswd=None, tag=None):
         self.bot = bot
+        self.elapsed_time = time()
         self.message = message
         self.uid = self.message.message_id
         self.extract = extract
