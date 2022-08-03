@@ -145,7 +145,7 @@ def get_readable_message():
                     msg += f"\n<b>Downloaded:</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                 msg += f"\n<b>Speed:</b> {download.speed()} | <b>ETA:</b> {download.eta()}"
                 msg += f"\n<b>Time Elapsed: </b>{get_readable_time(time() - download.message.date.timestamp())}"
-                msg += f"\n<b>Modul:</b> {download.eng()}
+                msg += f"\n<b>Modul:</b> {download.eng()}"
                 try:
                     msg += f"\n<b>Seeders:</b> {download.aria_download().num_seeders}" \
                            f" | <b>Peers:</b> {download.aria_download().connections}"
@@ -226,17 +226,17 @@ def get_readable_time(seconds: int) -> str:
     (days, remainder) = divmod(seconds, 86400)
     days = int(days)
     if days != 0:
-        result += f'{days}d'
+        result += f'{days}Hari'
     (hours, remainder) = divmod(remainder, 3600)
     hours = int(hours)
     if hours != 0:
-        result += f'{hours}h'
+        result += f'{hours}Jam'
     (minutes, seconds) = divmod(remainder, 60)
     minutes = int(minutes)
     if minutes != 0:
-        result += f'{minutes}m'
+        result += f'{minutes}Menit'
     seconds = int(seconds)
-    result += f'{seconds}s'
+    result += f'{seconds}Detik'
     return result
 
 def is_url(url: str):
