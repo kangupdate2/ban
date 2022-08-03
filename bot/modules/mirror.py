@@ -335,13 +335,13 @@ class MirrorListener:
                     pass
             else:
                 pass
-            balas = 'I Have Sent Your Files In Your PM'
+            balas = f'I Have Sent Your Files In Your PM'
             uploadmsg = sendMarkup(msg + balas, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
             Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
             if MIRROR_LOGS:
                 try:
                     for chatid in MIRROR_LOGS:
-                        bot.sendMessage(chat_id=chatid, text=msg,
+                        bot.sendMessage(chat_id=chatid, balas,
                                         reply_markup=InlineKeyboardMarkup(buttons.build_menu(2)),
                                         parse_mode=ParseMode.HTML)
                 except Exception as e:
