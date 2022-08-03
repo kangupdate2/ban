@@ -78,9 +78,30 @@ def direct_link_generator(link: str):
         raise DirectDownloadLinkException(f'No Direct link function found for {link}')
 
 def zippy_share(url: str) -> str:
-    """ ZippyShare direct link generator
-    Based on https://github.com/zevtyardt/lk21 """
-    return Bypass().bypass_zippyshare(url)
+    """ ZippyShare direct links generator
+    Based on https://github.com/KenHV/Mirror-Bot
+             https://github.com/jovanzers/WinTenCermin """
+    try:
+        link = re.findall(r'\bhttps?://.*zippyshare\.com\S+', url)[0]
+    except IndexError:
+        raise DirectDownloadLinkException("No Zippyshare links found")
+    try:
+        base_url = re.search('http.+.zippyshare.com', link).group()
+        response = requests.get(link).content
+        pages = BeautifulSoup(response, "lxml")
+        try:
+            js_script = pages.find("div", {"class": "center"}).find_all("script")[1]
+        except IndexError:
+            js_script = pages.find("div", {"class": "right"}).find_all("script")[0]
+        js_content = re.findall(r'\.href.=."/(.*?)";', str(js_script))
+        js_content = 'var x = "/' + js_content[0] + '"'
+        evaljs = EvalJs()
+        setattr(evaljs, "x", None)
+        evaljs.execute(js_content)
+        js_content = getattr(evaljs, "x")
+        return base_url + js_content
+    except IndexError:
+        raise DirectDownloadLinkException("ERROR: Can't find download button")
 
 def yandex_disk(url: str) -> str:
     """ Yandex.Disk direct link generator
