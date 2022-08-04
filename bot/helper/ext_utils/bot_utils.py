@@ -22,7 +22,7 @@ PAGE_NO = 1
 
 class MirrorStatus:
     STATUS_UPLOADING = " 📤 MengUpload... "
-    STATUS_DOWNLOADING = "📥 MengDownload... "
+    STATUS_DOWNLOADING = "📥 MenDownload... "
     STATUS_CLONING = "♻️ Menyalin... "
     STATUS_WAITING = "💤 Queued... "
     STATUS_FAILED = "🚫 Gagal, menghapus Download tan..."
