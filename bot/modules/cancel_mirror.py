@@ -2,7 +2,7 @@ from telegram import InlineKeyboardMarkup
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from time import sleep
 
-from bot import download_dict, dispatcher, download_dict_lock, SUDO_USERS, OWNER_ID
+from bot import download_dict, dispatcher, download_dict_lock, QB_SEED, SUDO_USERS, OWNER_ID
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.message_utils import sendMessage, sendMarkup
@@ -17,7 +17,7 @@ def cancel_mirror(update, context):
         gid = args[1]
         dl = getDownloadByGid(gid)
         if not dl:
-            return sendMessage(f"GID: <code>{gid}</code> Not Found.", context.bot, update.message)
+            return sendMessage(f"GID: <code>{gid}</code> Tidak temu.", context.bot, update.message)
     elif update.message.reply_to_message:
         mirror_message = update.message.reply_to_message
         with download_dict_lock:
@@ -27,20 +27,20 @@ def cancel_mirror(update, context):
             else:
                 dl = None
         if not dl:
-            return sendMessage("This is not an active task!", context.bot, update.message)
+            return sendMessage("Tidak ada tugas!", context.bot, update.message)
     elif len(args) == 1:
-        msg = f"Reply to an active <code>/{BotCommands.MirrorCommand}</code> message which was used to start the download or send <code>/{BotCommands.CancelMirror} GID</code> to cancel it!"
+        msg = f"ketik <code>/{BotCommands.MirrorCommand}</code> yg digunakan untuk download <code>/{BotCommands.CancelMirror} GID</code> untuk batal!"
         return sendMessage(msg, context.bot, update.message)
 
-    if OWNER_ID != user_id and dl.message.from_user.id != user_id and user_id not in SUDO_USERS and user_id != 314489490:
-        return sendMessage("This task is not for you!", context.bot, update.message)
+    if OWNER_ID != user_id and dl.message.from_user.id != user_id and user_id not in SUDO_USERS:
+        return sendMessage("Tugas ini bukan untukmu!", context.bot, update.message)
 
     if dl.status() == MirrorStatus.STATUS_ARCHIVING:
-        sendMessage("Archival in Progress, You Can't Cancel It.", context.bot, update.message)
+        sendMessage("Progress Arsip, Tidak bisa batal.", context.bot, update.message)
     elif dl.status() == MirrorStatus.STATUS_EXTRACTING:
-        sendMessage("Extract in Progress, You Can't Cancel It.", context.bot, update.message)
+        sendMessage("Progress Ekstrak, Tidak bisa batal.", context.bot, update.message)
     elif dl.status() == MirrorStatus.STATUS_SPLITTING:
-        sendMessage("Split in Progress, You Can't Cancel It.", context.bot, update.message)
+        sendMessage("Progress Split, Tidak bisa batal.", context.bot, update.message)
     else:
         dl.download().cancel_download()
 
@@ -60,10 +60,12 @@ def cancell_all_buttons(update, context):
     buttons = button_build.ButtonMaker()
     buttons.sbutton("Downloading", "canall down")
     buttons.sbutton("Uploading", "canall up")
+    if QB_SEED:
+        buttons.sbutton("Seeding", "canall seed")
     buttons.sbutton("Cloning", "canall clone")
     buttons.sbutton("All", "canall all")
     button = InlineKeyboardMarkup(buttons.build_menu(2))
-    sendMarkup('Choose tasks to cancel.', context.bot, update.message, button)
+    sendMarkup('Pilih yang mau di batalin.', context.bot, update.message, button)
 
 def cancel_all_update(update, context):
     query = update.callback_query
@@ -75,7 +77,7 @@ def cancel_all_update(update, context):
         query.message.delete()
         cancel_all(data[1])
     else:
-        query.answer(text="You don't have permission to use these buttons!", show_alert=True)
+        query.answer(text="Kamu tidak berhak!", show_alert=True)
 
 
 

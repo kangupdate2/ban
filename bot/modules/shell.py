@@ -10,7 +10,7 @@ def shell(update, context):
     message = update.effective_message
     cmd = message.text.split(' ', 1)
     if len(cmd) == 1:
-        return message.reply_text('No command to execute was given.', parse_mode='HTML')
+        return message.reply_text('Tidak ada perintah.', parse_mode='HTML')
     cmd = cmd[1]
     process = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     stdout, stderr = process.communicate()

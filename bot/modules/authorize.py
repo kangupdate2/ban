@@ -14,35 +14,35 @@ def authorize(update, context):
     if len(message_) == 2:
         user_id = int(message_[1])
         if user_id in AUTHORIZED_CHATS:
-            msg = 'User Already Authorized!'
+            msg = 'User sudah diijinkan!'
         elif DB_URI is not None:
             msg = DbManger().user_auth(user_id)
             AUTHORIZED_CHATS.add(user_id)
         else:
             AUTHORIZED_CHATS.add(user_id)
-            msg = 'User Authorized'
+            msg = 'User diijinkan'
     elif reply_message is None:
         # Trying to authorize a chat
         chat_id = update.effective_chat.id
         if chat_id in AUTHORIZED_CHATS:
-            msg = 'Chat Already Authorized!'
+            msg = 'Chat sudah diijinkan!'
         elif DB_URI is not None:
             msg = DbManger().user_auth(chat_id)
             AUTHORIZED_CHATS.add(chat_id)
         else:
             AUTHORIZED_CHATS.add(chat_id)
-            msg = 'Chat Authorized'
+            msg = 'Chat diijinkan'
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
         if user_id in AUTHORIZED_CHATS:
-            msg = 'User Already Authorized!'
+            msg = 'User sudah diijinkan!'
         elif DB_URI is not None:
             msg = DbManger().user_auth(user_id)
             AUTHORIZED_CHATS.add(user_id)
         else:
             AUTHORIZED_CHATS.add(user_id)
-            msg = 'User Authorized'
+            msg = 'User diijinkan'
     sendMessage(msg, context.bot, update.message)
 
 def unauthorize(update, context):
@@ -56,10 +56,10 @@ def unauthorize(update, context):
             if DB_URI is not None:
                 msg = DbManger().user_unauth(user_id)
             else:
-                msg = 'User Unauthorized'
+                msg = 'User tidak diijinkan'
             AUTHORIZED_CHATS.remove(user_id)
         else:
-            msg = 'User Already Unauthorized!'
+            msg = 'User sudah tidak diijinkan!'
     elif reply_message is None:
         # Trying to unauthorize a chat
         chat_id = update.effective_chat.id
@@ -67,10 +67,10 @@ def unauthorize(update, context):
             if DB_URI is not None:
                 msg = DbManger().user_unauth(chat_id)
             else:
-                msg = 'Chat Unauthorized'
+                msg = 'Chat tidak diijinkan'
             AUTHORIZED_CHATS.remove(chat_id)
         else:
-            msg = 'Chat Already Unauthorized!'
+            msg = 'Chat sudah tidak diijinkan!'
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
@@ -78,10 +78,10 @@ def unauthorize(update, context):
             if DB_URI is not None:
                 msg = DbManger().user_unauth(user_id)
             else:
-                msg = 'User Unauthorized'
+                msg = 'User tidak diijinkan'
             AUTHORIZED_CHATS.remove(user_id)
         else:
-            msg = 'User Already Unauthorized!'
+            msg = 'User sudah tidak diijinkan!'
     sendMessage(msg, context.bot, update.message)
 
 def addleechlog(update, context):
@@ -92,35 +92,35 @@ def addleechlog(update, context):
     if len(message_) == 2:
         user_id = int(message_[1])
         if user_id in LEECH_LOG:
-            msg = 'User Already in Leech Log!'
+            msg = 'User sudah dalam Leech Log!'
         elif DB_URI is not None:
             msg = DbManger().addleech_log(user_id)
             LEECH_LOG.add(user_id)
         else:
             LEECH_LOG.add(user_id)
-            msg = 'User Added in Leech Logs'
+            msg = 'User ditambah di Leech Logs'
     elif reply_message is None:
         # Trying to authorize a chat
         chat_id = update.effective_chat.id
         if chat_id in LEECH_LOG:
-            msg = 'Chat Already in Leech Logs'
+            msg = 'Chat sudah di Leech Logs'
         elif DB_URI is not None:
             msg = DbManger().addleech_log(chat_id)
             LEECH_LOG.add(chat_id)
         else:
             LEECH_LOG.add(chat_id)
-            msg = 'Chat Added to Leech Logs'
+            msg = 'Chat sudah di Leech Logs'
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
         if user_id in LEECH_LOG:
-            msg = 'Chat Already in Leech Logs'
+            msg = 'Chat sudah di Leech Logs'
         elif DB_URI is not None:
             msg = DbManger().addleech_log(user_id)
             LEECH_LOG.add(user_id)
         else:
             LEECH_LOG.add(user_id)
-            msg = 'Chat Added to Leech Logs'
+            msg = 'Chat sudah di Leech Logs'
     sendMessage(msg, context.bot, update.message)
 
 
@@ -135,10 +135,10 @@ def rmleechlog(update, context):
             if DB_URI is not None:
                 msg = DbManger().rmleech_log(user_id)
             else:
-                msg = 'User removed from leech logs'
+                msg = 'User dihapus dari leech logs'
             LEECH_LOG.remove(user_id)
         else:
-            msg = 'User does not exist in leech logs!'
+            msg = 'User tidak ada di leech logs!'
     elif reply_message is None:
         # Trying to unauthorize a chat
         chat_id = update.effective_chat.id
@@ -146,10 +146,10 @@ def rmleechlog(update, context):
             if DB_URI is not None:
                 msg = DbManger().rmleech_log(chat_id)
             else:
-                msg = 'Chat removed from leech logs!'
+                msg = 'Chat dihapus dari leech logs!'
             LEECH_LOG.remove(chat_id)
         else:
-            msg = 'Chat does not exist in leech logs!'
+            msg = 'Chat tidak ada di leech logs!'
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
@@ -157,10 +157,10 @@ def rmleechlog(update, context):
             if DB_URI is not None:
                 msg = DbManger().rmleech_log(user_id)
             else:
-                msg = 'User removed from leech logs!'
+                msg = 'User dihapus dari leech logs!'
             LEECH_LOG.remove(user_id)
         else:
-            msg = 'User does not exist in leech logs!'
+            msg = 'User tidak ada di leech logs!'
     sendMessage(msg, context.bot, update.message)
 
 def addSudo(update, context):
@@ -179,7 +179,7 @@ def addSudo(update, context):
             SUDO_USERS.add(user_id)
             msg = 'Promoted as Sudo'
     elif reply_message is None:
-        msg = "Give ID or Reply To message of whom you want to Promote."
+        msg = "Beri ID or Balas pesan yang ingin di promosikan."
     else:
         # Trying to authorize someone by replying
         user_id = reply_message.from_user.id
@@ -209,7 +209,7 @@ def removeSudo(update, context):
         else:
             msg = 'Not sudo user to demote!'
     elif reply_message is None:
-        msg = "Give ID or Reply To message of whom you want to remove from Sudo"
+        msg = "Beri ID or Balas pesan yang ingin di hapus dari Sudo"
     else:
         user_id = reply_message.from_user.id
         if user_id in SUDO_USERS:

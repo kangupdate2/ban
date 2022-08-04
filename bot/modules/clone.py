@@ -23,7 +23,7 @@ def _clone(message, bot, multi=0):
             reply_to.delete()
     if BOT_PM:
         try:
-            msg1 = f'Added your Requested link to Download\n'
+            msg1 = f'Requested link utk Download ditambah\n'
             send = bot.sendMessage(message.from_user.id, text=msg1)
             send.delete()
         except Exception as e:
@@ -32,8 +32,8 @@ def _clone(message, bot, multi=0):
             b_uname = bot_d.username
             uname = f'<a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>'
             botstart = f"http://t.me/{b_uname}"
-            buttons.buildbutton("Click Here to Start Me", f"{botstart}")
-            startwarn = f"Dear {uname},\n\n<b>I found that you haven't started me in PM (Private Chat) yet.</b>\n\nFrom now on i will give link and leeched files in PM and log channel only"
+            buttons.buildbutton("Klik untuk Mulai", f"{botstart}")
+            startwarn = f"Dear {uname},\n\n<b>Kamu belum ketik Start di PM ku (Private Chat).</b>\n\nsekarang file akan di kirim lewat PM / LOG DOWNLOAD"
             message = sendMarkup(startwarn, bot, message, InlineKeyboardMarkup(buttons.build_menu(2)))
             Thread(target=auto_delete_message, args=(bot, message, message)).start()
             return
@@ -60,14 +60,14 @@ def _clone(message, bot, multi=0):
     is_appdrive = is_appdrive_link(link)
     if is_gdtot:
         try:
-            msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
+            msg = sendMessage(f"Pengerjaan: <code>{link}</code>", bot, message)
             link = gdtot(link)
             deleteMessage(bot, msg)
         except DirectDownloadLinkException as e:
             deleteMessage(bot, msg)
             return sendMessage(str(e), bot, message)
     if is_appdrive:
-        msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
+        msg = sendMessage(f"Pengerjaan: <code>{link}</code>", bot, message)
         try:
             apdict = appdrive(link)
             link = apdict.get('gdrive_link')
@@ -81,15 +81,15 @@ def _clone(message, bot, multi=0):
         if res != "":
             return sendMessage(res, bot, message)
         if STOP_DUPLICATE:
-            LOGGER.info('Checking File/Folder if already in Drive...')
+            LOGGER.info('Meriksa File/Folder Jika sudah ada...')
             smsg, button = gd.drive_list(name, True, True)
             if smsg:
-                msg3 = "File/Folder is already available in Drive.\nHere are the search results:"
+                msg3 = "File/Folder sudah ada di penyimpanan.\nKlik tombol dibawah:"
                 return sendMarkup(msg3, bot, message, button)
         if CLONE_LIMIT is not None:
-            LOGGER.info('Checking File/Folder Size...')
+            LOGGER.info('Meriksa ukuran File/Folder ...')
             if size > CLONE_LIMIT * 1024**3:
-                msg2 = f'Failed, Clone limit is {CLONE_LIMIT}GB.\nYour File/Folder size is {get_readable_file_size(size)}.'
+                msg2 = f'Gagal, melebihi limit {CLONE_LIMIT}GB.\nUkuran File/Folder mu: {get_readable_file_size(size)}.'
                 return sendMessage(msg2, bot, message)
         if multi > 1:
             sleep(4)
@@ -100,7 +100,7 @@ def _clone(message, bot, multi=0):
             sleep(4)
             Thread(target=_clone, args=(nextmsg, bot, multi)).start()
         if files <= 20:
-            msg = sendMessage(f"Cloning: <code>{link}</code>", bot, message)
+            msg = sendMessage(f"Menyalin: <code>{link}</code>", bot, message)
             result, button = gd.clone(link)
             deleteMessage(bot, msg)
         else:
@@ -123,12 +123,12 @@ def _clone(message, bot, multi=0):
                     update_all_messages()
             except IndexError:
                 pass
-        cc = f'\n\n<b>cc: </b>{tag}'
+        cc = f'\n\n<b>Untuk: </b>{tag}'
         if button in ["cancelled", ""]:
             sendMessage(f"{tag} {result}", bot, message)
         else:
             msg = sendMarkup(result + cc, bot, message, button)
-            LOGGER.info(f'Cloning Done: {name}')
+            LOGGER.info(f'Menyalin Selesai: {name}')
             Thread(target=auto_delete_upload_message, args=(bot, message, msg)).start()
         if is_gdtot:
             gd.deletefile(link)
@@ -150,7 +150,7 @@ def _clone(message, bot, multi=0):
                 LOGGER.warning(e)
                 return
     else:
-        sendMessage('Send Gdrive or gdtot or appdrive link along with command or by replying to the link by command', bot, message)
+        sendMessage('Kirim link Gdrive or gdtot or appdrive dengan perinah atau balas dengan perintah', bot, message)
 
 @new_thread
 def cloneNode(update, context):
