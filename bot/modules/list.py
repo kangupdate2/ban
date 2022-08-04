@@ -35,7 +35,7 @@ def select_type(update, context):
         return editMessage("list dibatalin!", msg)
     query.answer()
     item_type = data[2]
-    editMessage(f"<b>Searching for <i>{key}</i> sedang dicari, Tunggu y</b>", msg)
+    editMessage(f"<b><i>{key}</i></b> <b>sedang dicari, Tunggu y</b>", msg)
     Thread(target=_list_drive, args=(key, msg, item_type)).start()
 
 def _list_drive(key, bmsg, item_type):
