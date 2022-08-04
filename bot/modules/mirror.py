@@ -15,7 +15,7 @@ from bot import bot, Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUT
                 download_dict, download_dict_lock, MAX_LEECH_SIZE, LOGGER, MEGA_KEY, DB_URI, INCOMPLETE_TASK_NOTIFIER, \
                 LEECH_LOG, SOURCE_LINK, BOT_PM, MIRROR_LOGS, AUTO_DELETE_UPLOAD_MESSAGE_DURATION
 
-from bot.helper.ext_utils.bot_utils import is_url, is_magnet, is_gdtot_link, is_mega_link, is_gdrive_link, get_content_type, get_readable_time
+from bot.helper.ext_utils.bot_utils import is_url, is_magnet, is_gdtot_link, is_mega_link, is_gdrive_link, get_content_type, get_readable_time2
 from bot.helper.ext_utils.fs_utils import get_base_name, get_path_size, split_file, clean_download
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException, NotSupportedExtractionArchive
 from bot.helper.mirror_utils.download_utils.aria2_download import add_aria2c_download
@@ -258,7 +258,7 @@ class MirrorListener:
             msg += f'\n<b> ↳Files: </b>{folders}'
             if typ != 0:
                 msg += f'\n<b>File Gagal: </b>{typ}'
-            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}\n\n{self.tag}"
+            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time2(time() - self.elapsed_time)}\n\n{self.tag}"
             msg += f' file Ambil di <a href="https://t.me/+GTGd4_M68w0wZmJl">LOG TELEFILE</a>'
             if not files:
                 uploadmsg = sendMessage(msg, self.bot, self.message)
@@ -278,7 +278,7 @@ class MirrorListener:
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
                 msg += f'\n<b> ↳Folders: </b>{folders}'
                 msg += f'\n<b> ↳Files: </b>{files}'
-            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}"
+            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time2(time() - self.elapsed_time)}"
             msg += f'\n\n<b>User: </b>{self.tag}'
             buttons = ButtonMaker()
             buttons.buildbutton("Link Gdrive", link)
@@ -338,7 +338,7 @@ class MirrorListener:
                     pass
             else:
                 pass
-            balas = f"<code>{escape(name)}</code>\n\n<b>Lama Proses: </b>{get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
+            balas = f"<code>{escape(name)}</code>\n\n<b>Lama Proses: </b>{get_readable_time2(time() - self.elapsed_time)}\nCekPM {self.tag}"
             balas += f' / <a href="https://t.me/+ERfZJxvVNzA5MjZl">LOG DOWNLOAD</a>'
             sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
