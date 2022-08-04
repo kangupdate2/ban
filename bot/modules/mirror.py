@@ -255,9 +255,10 @@ class MirrorListener:
                 b_uname = bot_d.username
                 botstart = f"http://t.me/{b_uname}"
                 buttons.buildbutton("Cek PM", f"{botstart}")
-            msg += f'\n<b>> ↳Files: </b>{folders}'
+            msg += f'\n<b> ↳Files: </b>{folders}'
             if typ != 0:
                 msg += f'\n<b>File Gagal: </b>{typ}'
+            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}"
             msg += f'\n\n<b>User: </b>{self.tag}'
             if not files:
                 uploadmsg = sendMessage(msg, self.bot, self.message)
@@ -277,7 +278,7 @@ class MirrorListener:
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
                 msg += f'\n<b> ↳Folders: </b>{folders}'
                 msg += f'\n<b> ↳Files: </b>{files}'
-            msg += f"\n<b>Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}"
+            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}"
             msg += f'\n\n<b>User: </b>{self.tag}'
             buttons = ButtonMaker()
             buttons.buildbutton("Link Gdrive", link)
@@ -337,7 +338,7 @@ class MirrorListener:
                     pass
             else:
                 pass
-            balas = f"<code>{escape(name)}</code>\n\n<b>Lama Prosee: </b>{get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
+            balas = f"<code>{escape(name)}</code>\n\n<b>Lama Proses: </b>{get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
             balas += f' / <a href="https://t.me/+GTGd4_M68w0wZmJl">LOG DOWNLOAD</a>'
             sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
