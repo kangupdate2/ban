@@ -115,7 +115,7 @@ def get_progress_bar_string(status):
     cFull = p // 8
     p_str = '🟩' * cFull
     p_str += '▇' * (12 - cFull)
-    p_str = f"[{p_str}]"
+    p_str = f"|{p_str}|"
     return p_str
 
 def get_readable_message():
@@ -144,6 +144,7 @@ def get_readable_message():
                 else:
                     msg += f"\n<b>↳🚦TerDownload:</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                 msg += f"\n<b>↳⚡️Spd:</b> {download.speed()} | <b>⏰Est:</b> {download.eta()}"
+                msg += f"\n<b>Lama Proses: </b>{get_readable_time(time() - download.message.date.timestamp())}"
                 msg += f"\n<b>Modul:</b> {download.eng()}"
                 try:
                     msg += f"\n<b>Seeders:</b> {download.aria_download().num_seeders}" \
@@ -163,7 +164,6 @@ def get_readable_message():
                         pass
                 else:
                     msg += f'\n<b>User:</b> ️<code>{download.message.from_user.first_name}</code> | <b>ID:</b> <code>{download.message.from_user.id}</code>'
-                msg += f"\n<b>Lama Proses: </b>{get_readable_time(time() - download.message.date.timestamp())}"
                 msg += f"\n<b>Untuk Berhenti: </b><code>/{BotCommands.CancelMirror} {download.gid()}</code>"
             msg += "\n\n"
             if STATUS_LIMIT is not None and index == STATUS_LIMIT:
@@ -186,7 +186,7 @@ def get_readable_message():
                     upspeed_bytes += float(spd.split('M')[0]) * 1048576
         bmsg = f"\n<b>🔻DL:</b> {get_readable_file_size(dlspeed_bytes)}/s | <b>🔺UL:</b> {get_readable_file_size(upspeed_bytes)}/s"
         buttons = ButtonMaker()
-        buttons.sbutton("Statistics", str(FOUR))
+        buttons.sbutton("STATUS", str(FOUR))
         sbutton = InlineKeyboardMarkup(buttons.build_menu(1))
         if STATUS_LIMIT is not None and tasks > STATUS_LIMIT:
             buttons = ButtonMaker()
