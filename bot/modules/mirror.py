@@ -258,8 +258,8 @@ class MirrorListener:
             msg += f'\n<b> ↳Files: </b>{folders}'
             if typ != 0:
                 msg += f'\n<b>File Gagal: </b>{typ}'
-            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
-            msg += f' / <a href="https://t.me/+GTGd4_M68w0wZmJl">LOG TELEFILE</a>'
+            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}\n\n{self.tag}"
+            msg += f' file Ambil di <a href="https://t.me/+GTGd4_M68w0wZmJl">LOG TELEFILE</a>'
             if not files:
                 uploadmsg = sendMessage(msg, self.bot, self.message)
             else:
