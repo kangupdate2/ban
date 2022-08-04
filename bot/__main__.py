@@ -7,7 +7,7 @@ from sys import executable
 from telegram import InlineKeyboardMarkup
 from telegram.ext import CommandHandler
 
-from bot import bot, dispatcher, updater, botStartTime, IGNORE_PENDING_REQUESTS, LOGGER, Interval, INCOMPLETE_TASK_NOTIFIER, DB_URI, alive, app, main_loop, HEROKU_API_KEY, HEROKU_APP_NAME, USER_SESSION_STRING, app_session
+from bot import bot, dispatcher, updater, botStartTime, IGNORE_PENDING_REQUESTS, LOGGER, Interval, INCOMPLETE_TASK_NOTIFIER, DB_URI, app, main_loop
 from .helper.ext_utils.fs_utils import start_cleanup, clean_all, exit_clean_up
 from .helper.ext_utils.telegraph_helper import telegraph
 from .helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
@@ -16,7 +16,6 @@ from .helper.telegram_helper.bot_commands import BotCommands
 from .helper.telegram_helper.message_utils import sendMessage, sendMarkup, editMessage, sendLogFile
 from .helper.telegram_helper.filters import CustomFilters
 from .helper.telegram_helper.button_build import ButtonMaker
-from .helper.ext_utils.heroku_helper import getHerokuDetails
 from .modules import authorize, list, cancel_mirror, mirror_status, mirror, clone, watch, shell, eval, delete, count, leech_settings, search, rss
 
 
@@ -39,9 +38,9 @@ def stats(update, context):
     mem_a = get_readable_file_size(memory.available)
     mem_u = get_readable_file_size(memory.used)
     stats = f'<b>Commit Date:</b> {last_commit}\n\n'\
-            f'<b>Bot Uptime:</b> {currentTime}\n\n'\
-            f'<b>Total Disk Space:</b> {total}\n'\
-            f'<b>Used:</b> {used} | <b>Free:</b> {free}\n\n'\
+            f'<b>Bot AktifKerja:</b> {currentTime}\n\n'\
+            f'<b>Total penyimpanan:</b> {total}\n'\
+            f'<b>Digunakan:</b> {used} | <b>Kosong:</b> {free}\n\n'\
             f'<b>Up:</b> {sent} | '\
             f'<b>Down:</b> {recv}\n\n'\
             f'<b>CPU:</b> {cpuUsage}% | '\
@@ -50,34 +49,31 @@ def stats(update, context):
             f'<b>Total Memory:</b> {mem_t}\n'\
             f'<b>Free:</b> {mem_a} | '\
             f'<b>Used:</b> {mem_u}\n\n'
-    heroku = getHerokuDetails(HEROKU_API_KEY, HEROKU_APP_NAME)
-    if heroku: stats += heroku
     sendMessage(stats, context.bot, update.message)
 
 
 def start(update, context):
     buttons = ButtonMaker()
-    buttons.buildbutton("Repo", "https://github.com/arshsisodiya/helios-mirror")
-    buttons.buildbutton("Support Group", "https://t.me/mirrorsociety")
+    buttons.buildbutton("Admin", "https://t.me/")
+    buttons.buildbutton("Group", "https://t.me/")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
-        start_string = f'''
-This bot can mirror all your links to Google Drive!
-Type /{BotCommands.HelpCommand} to get a list of available commands
+        start_string = f''' 
+Bot yang bisa mirror sesuka hati ke to Google Drive!
+Ketik /{BotCommands.HelpCommand} untuk petunjuk penggunaan.
 '''
         sendMarkup(start_string, context.bot, update.message, reply_markup)
     else:
-        sendMarkup('Not Authorized user, deploy your own mirror-leech bot', context.bot, update.message, reply_markup)
+        sendMarkup('Tidak ada ijin admin, Buat sendiri sana', context.bot, update.message, reply_markup)
 
 def restart(update, context):
-    restart_message = sendMessage("Restarting...", context.bot, update.message)
+    restart_message = sendMessage("Muat Ulang...", context.bot, update.message)
     if Interval:
         Interval[0].cancel()
-    alive.kill()
     clean_all()
-    srun(["pkill", "-9", "-f", "gunicorn|extra-api|last-api|megasdkrest|new-api"])
+    srun(["pkill", "-f", "gunicorn|aria2c|qbittorrent-nox"])
     srun(["python3", "update.py"])
-    with open(".restartmsg", "w") as f: 
+    with open(".restartmsg", "w") as f:
         f.truncate(0)
         f.write(f"{restart_message.chat.id}\n{restart_message.message_id}\n")
     osexecl(executable, executable, "-m", "bot")
@@ -85,7 +81,7 @@ def restart(update, context):
 
 def ping(update, context):
     start_time = int(round(time() * 1000))
-    reply = sendMessage("Starting Ping", context.bot, update.message)
+    reply = sendMessage("Pengujian Ping", context.bot, update.message)
     end_time = int(round(time() * 1000))
     editMessage(f'{end_time - start_time} ms', reply)
 
@@ -95,51 +91,49 @@ def log(update, context):
 
 
 help_string_telegraph = f'''<br>
-<b>/{BotCommands.HelpCommand}</b>: To get this message
+<b>/{BotCommands.MirrorCommand}</b> [download_url][magnet_link]: Memulai penyalinan Ketik <b>/{BotCommands.MirrorCommand}</b> Untuk petunjuk lain.
 <br><br>
-<b>/{BotCommands.MirrorCommand}</b> [download_url][magnet_link]: Start mirroring to Google Drive. Send <b>/{BotCommands.MirrorCommand}</b> for more help
+<b>/{BotCommands.ZipMirrorCommand}</b> [download_url][magnet_link]: Memulai penyalinan dan upload file/folder dalam bentuk format zip
 <br><br>
-<b>/{BotCommands.ZipMirrorCommand}</b> [download_url][magnet_link]: Start mirroring and upload the file/folder compressed with zip extension
+<b>/{BotCommands.UnzipMirrorCommand}</b> [download_url][magnet_link]: Memulai penyalinan dan upload file/folder bentuk Arsip lalu diekstrak
 <br><br>
-<b>/{BotCommands.UnzipMirrorCommand}</b> [download_url][magnet_link]: Start mirroring and upload the file/folder extracted from any archive extension
+<b>/{BotCommands.QbMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Memulai penyalinan menggunakan qBittorrent, Ketik <b>/{BotCommands.QbMirrorCommand} s</b> untuk memilih file
 <br><br>
-<b>/{BotCommands.QbMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start Mirroring using qBittorrent, Use <b>/{BotCommands.QbMirrorCommand} s</b> to select files before downloading
+<b>/{BotCommands.QbZipMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Memulai penyalinan menggunakan qBittorrent and upload file/folder dalam bentuk format zip
 <br><br>
-<b>/{BotCommands.QbZipMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start mirroring using qBittorrent and upload the file/folder compressed with zip extension
+<b>/{BotCommands.QbUnzipMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Memulai penyalinan menggunakan qBittorrent and upload file/folder bentuk Arsip lalu diekstrak
 <br><br>
-<b>/{BotCommands.QbUnzipMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start mirroring using qBittorrent and upload the file/folder extracted from any archive extension
+<b>/{BotCommands.LeechCommand}</b> [download_url][magnet_link]: Mulai leeching ke Telegram, Ketik <b>/{BotCommands.LeechCommand} s</b> untuk memilih file
 <br><br>
-<b>/{BotCommands.LeechCommand}</b> [download_url][magnet_link]: Start leeching to Telegram, Use <b>/{BotCommands.LeechCommand} s</b> to select files before leeching
+<b>/{BotCommands.ZipLeechCommand}</b> [download_url][magnet_link]: Mulai leeching ke Telegram and upload file/folder dalam bentuk format zip
 <br><br>
-<b>/{BotCommands.ZipLeechCommand}</b> [download_url][magnet_link]: Start leeching to Telegram and upload the file/folder compressed with zip extension
+<b>/{BotCommands.UnzipLeechCommand}</b> [download_url][magnet_link][torent_file] Mulai leeching ke Telegram and upload file/folder bentuk Arsip lalu diekstrak
 <br><br>
-<b>/{BotCommands.UnzipLeechCommand}</b> [download_url][magnet_link][torent_file]: Start leeching to Telegram and upload the file/folder extracted from any archive extension
+<b>/{BotCommands.QbLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Mulai leeching ke Telegram menggunakan qBittorrent, Ketik <b>/{BotCommands.QbLeechCommand} s</b> untuk memilih file
 <br><br>
-<b>/{BotCommands.QbLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start leeching to Telegram using qBittorrent, Use <b>/{BotCommands.QbLeechCommand} s</b> to select files before leeching
+<b>/{BotCommands.QbZipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Mulai leeching ke Telegram menggunakan qBittorrent and upload file/folder dalam bentuk format zip
 <br><br>
-<b>/{BotCommands.QbZipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start leeching to Telegram using qBittorrent and upload the file/folder compressed with zip extension
+<b>/{BotCommands.QbUnzipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Mulai leeching ke Telegram menggunakan qBittorrent and upload file/folder bentuk Arsip lalu diekstrak
 <br><br>
-<b>/{BotCommands.QbUnzipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start leeching to Telegram using qBittorrent and upload the file/folder extracted from any archive extension
+<b>/{BotCommands.CloneCommand}</b> [drive_url][gdtot_url]: Salin file/folder ke Google Drive
 <br><br>
-<b>/{BotCommands.CloneCommand}</b> [drive_url][gdtot_url]: Copy file/folder to Google Drive
+<b>/{BotCommands.CountCommand}</b> [drive_url][gdtot_url]: Hitung file/folder of Google Drive
 <br><br>
-<b>/{BotCommands.CountCommand}</b> [drive_url][gdtot_url]: Count file/folder of Google Drive
+<b>/{BotCommands.DeleteCommand}</b> [drive_url]: Hapus file/folder dari Google Drive (Only Owner & Sudo)
 <br><br>
-<b>/{BotCommands.DeleteCommand}</b> [drive_url]: Delete file/folder from Google Drive (Only Owner & Sudo)
+<b>/{BotCommands.WatchCommand}</b> [yt-dlp supported link]: Salin yt-dlp supported link. Ketik <b>/{BotCommands.WatchCommand}</b> untuk petunjuk lain
 <br><br>
-<b>/{BotCommands.WatchCommand}</b> [yt-dlp supported link]: Mirror yt-dlp supported link. Send <b>/{BotCommands.WatchCommand}</b> for more help
-<br><br>
-<b>/{BotCommands.ZipWatchCommand}</b> [yt-dlp supported link]: Mirror yt-dlp supported link as zip
+<b>/{BotCommands.ZipWatchCommand}</b> [yt-dlp supported link]: Salin yt-dlp supported link ke format zip
 <br><br>
 <b>/{BotCommands.LeechWatchCommand}</b> [yt-dlp supported link]: Leech yt-dlp supported link
 <br><br>
-<b>/{BotCommands.LeechZipWatchCommand}</b> [yt-dlp supported link]: Leech yt-dlp supported link as zip
+<b>/{BotCommands.LeechZipWatchCommand}</b> [yt-dlp supported link]: Leech yt-dlp supported link ke format zip
 <br><br>
-<b>/{BotCommands.LeechSetCommand}</b>: Leech settings
+<b>/{BotCommands.LeechSetCommand}</b>: Pengaturan Leech
 <br><br>
-<b>/{BotCommands.SetThumbCommand}</b>: Reply photo to set it as Thumbnail
+<b>/{BotCommands.SetThumbCommand}</b>: Balas photo untuk diatur sebagai Thumbnail
 <br><br>
-<b>/{BotCommands.RssListCommand}</b>: List all subscribed rss feed info
+<b>/{BotCommands.RssListCommand}</b>: List semua subscribed rss feed info
 <br><br>
 <b>/{BotCommands.RssGetCommand}</b>: [Title] [Number](last N links): Force fetch last N links
 <br><br>
@@ -151,58 +145,93 @@ help_string_telegraph = f'''<br>
 <br><br>
 <b>/{BotCommands.CancelMirror}</b>: Reply to the message by which the download was initiated and that download will be cancelled
 <br><br>
-<b>/{BotCommands.CancelAllCommand}</b>: Cancel all downloading tasks
+<b>/{BotCommands.CancelAllCommand}</b>: Batal semua download tan
 <br><br>
-<b>/{BotCommands.ListCommand}</b> [query]: Search in Google Drive(s)
+<b>/{BotCommands.ListCommand}</b> [query]: Cari di Google Drive
 <br><br>
-<b>/{BotCommands.SearchCommand}</b> [query]: Search for torrents with API
+<b>/{BotCommands.SearchCommand}</b> [query]: Cari di Torrent
 <br>sites: <code>rarbg, 1337x, yts, etzv, tgx, torlock, piratebay, nyaasi, ettv</code><br><br>
-<b>/{BotCommands.StatusCommand}</b>: Shows a status of all the downloads
+<b>/{BotCommands.StatusCommand}</b>: Tunjukan status download
 <br><br>
-<b>/{BotCommands.StatsCommand}</b>: Show Stats of the machine the bot is hosted on
+<b>/{BotCommands.StatsCommand}</b>: Tunjukan status Bot
 '''
 
 
-sudo_help_string = f'''<br><br><b> Sudo/Owner Only Commands </b><br><br>
-<b>/{BotCommands.PingCommand}</b>: Check how long it takes to Ping the Bot
+sudo_help_string = f'''<br><br><b> Sudo/Owner Only </b><br><br>
+<b>/{BotCommands.PingCommand}</b>: Cek ping Bot
 <br><br>
-<b>/{BotCommands.AuthorizeCommand}</b>: Authorize a chat or a user to use the bot (Can only be invoked by Owner & Sudo of the bot)
+<b>/{BotCommands.AuthorizeCommand}</b>: diijinkan admin ( only Owner & Sudo )
 <br><br>
-<b>/{BotCommands.UnAuthorizeCommand}</b>: Unauthorize a chat or a user to use the bot (Can only be invoked by Owner & Sudo of the bot)
+<b>/{BotCommands.UnAuthorizeCommand}</b>: Ijin Dilepas admin ( only Owner & Sudo )
 <br><br>
-<b>/{BotCommands.AuthorizedUsersCommand}</b>: Show authorized users (Only Owner & Sudo)
+<b>/{BotCommands.AuthorizedUsersCommand}</b>: User yang diijinkan (Only Owner & Sudo)
 <br><br>
-<b>/{BotCommands.AddSudoCommand}</b>: Add sudo user (Only Owner)
+<b>/{BotCommands.AddSudoCommand}</b>: tambah sudo user (Only Owner)
 <br><br>
-<b>/{BotCommands.RmSudoCommand}</b>: Remove sudo users (Only Owner)
+<b>/{BotCommands.RmSudoCommand}</b>: Hapus sudo users (Only Owner)
 <br><br>
-<b>/{BotCommands.RestartCommand}</b>: Restart and update the bot
+<b>/{BotCommands.RestartCommand}</b>: Restart bot
 <br><br>
-<b>/{BotCommands.LogCommand}</b>: Get a log file of the bot. Handy for getting crash reports
+<b>/{BotCommands.LogCommand}</b>: Log file
 <br><br>
-<b>/{BotCommands.ShellCommand}</b>: Run commands in Shell (Only Owner)
+<b>/{BotCommands.ShellCommand}</b>: Program Shell (Only Owner)
 <br><br>
-<b>/{BotCommands.ExecHelpCommand}</b>: Get help for Executor module (Only Owner)
+<b>/{BotCommands.ExecHelpCommand}</b>: Executor module (Only Owner)
 <br><br>
-<b>/{BotCommands.AddleechlogCommand}</b>: Add Leech Log
+<b>/{BotCommands.AddleechlogCommand}</b>: Tambah Leech Log
 <br><br>
-<b>/{BotCommands.RmleechlogCommand}</b>: Remove Leech Log
+<b>/{BotCommands.RmleechlogCommand}</b>: Hapus Leech Log
 '''
 help_string = f'''
-Hei, Need Help!!
+Butuh bantuan, klik tombol Tutorial!!
 '''
 help = telegraph.create_page(
-        title='Helios-Mirror Help',
+        title='Petunjuk Penggunaan',
         content=help_string_telegraph + sudo_help_string,
     )["path"]
 
 def bot_help(update, context):
     button = ButtonMaker()
-    button.buildbutton("Click Here", f"https://telegra.ph/{help}")
+    button.buildbutton("Tutorial", f"https://telegra.ph/{help}")
     reply_markup = InlineKeyboardMarkup(button.build_menu(1))
     sendMarkup(help_string, context.bot, update.message, reply_markup)
 
+botcmds = [
+
+        (f'{BotCommands.MirrorCommand}', 'Mirror'),
+        (f'{BotCommands.ZipMirrorCommand}','Mirror and upload as zip'),
+        (f'{BotCommands.UnzipMirrorCommand}','Mirror and extract files'),
+        (f'{BotCommands.QbMirrorCommand}','Mirror torrent using qBittorrent'),
+        (f'{BotCommands.QbZipMirrorCommand}','Mirror torrent and upload as zip using qb'),
+        (f'{BotCommands.QbUnzipMirrorCommand}','Mirror torrent and extract files using qb'),
+        (f'{BotCommands.WatchCommand}','Mirror yt-dlp supported link'),
+        (f'{BotCommands.ZipWatchCommand}','Mirror yt-dlp supported link as zip'),
+        (f'{BotCommands.CloneCommand}','Copy file/folder to Drive'),
+        (f'{BotCommands.LeechCommand}','Leech'),
+        (f'{BotCommands.ZipLeechCommand}','Leech and upload as zip'),
+        (f'{BotCommands.UnzipLeechCommand}','Leech and extract files'),
+        (f'{BotCommands.QbLeechCommand}','Leech torrent using qBittorrent'),
+        (f'{BotCommands.QbZipLeechCommand}','Leech torrent and upload as zip using qb'),
+        (f'{BotCommands.QbUnzipLeechCommand}','Leech torrent and extract using qb'),
+        (f'{BotCommands.LeechWatchCommand}','Leech yt-dlp supported link'),
+        (f'{BotCommands.LeechZipWatchCommand}','Leech yt-dlp supported link as zip'),
+        (f'{BotCommands.CountCommand}','Count file/folder of Drive'),
+        (f'{BotCommands.DeleteCommand}','Delete file/folder from Drive'),
+        (f'{BotCommands.CancelMirror}','Cancel a task'),
+        (f'{BotCommands.CancelAllCommand}','Cancel all downloading tasks'),
+        (f'{BotCommands.ListCommand}','Search in Drive'),
+        (f'{BotCommands.LeechSetCommand}','Leech settings'),
+        (f'{BotCommands.SetThumbCommand}','Set thumbnail'),
+        (f'{BotCommands.StatusCommand}','Get mirror status message'),
+        (f'{BotCommands.StatsCommand}','Bot usage stats'),
+        (f'{BotCommands.PingCommand}','Ping the bot'),
+        (f'{BotCommands.RestartCommand}','Restart the bot'),
+        (f'{BotCommands.LogCommand}','Get the bot Log'),
+        (f'{BotCommands.HelpCommand}','Get detailed help')
+    ]
+
 def main():
+    # bot.set_my_commands(botcmds)
     start_cleanup()
     if INCOMPLETE_TASK_NOTIFIER and DB_URI is not None:
         notifier_dict = DbManger().get_incomplete_tasks()
@@ -211,21 +240,21 @@ def main():
                 if ospath.isfile(".restartmsg"):
                     with open(".restartmsg") as f:
                         chat_id, msg_id = map(int, f)
-                    msg = 'Restarted successfully!'
+                    msg = 'MuatUlang Selesai!'
                 else:
-                    msg = 'Bot Restarted!'
+                    msg = 'Bot DiMuatUlang!'
                 for tag, links in data.items():
                      msg += f"\n\n{tag}: "
                      for index, link in enumerate(links, start=1):
                          msg += f" <a href='{link}'>{index}</a> |"
                          if len(msg.encode()) > 4000:
-                             if 'Restarted successfully!' in msg and cid == chat_id:
+                             if 'MuatUlang Selesai!' in msg and cid == chat_id:
                                  bot.editMessageText(msg, chat_id, msg_id, parse_mode='HTMl', disable_web_page_preview=True)
                                  osremove(".restartmsg")
                              else:
                                  bot.sendMessage(cid, msg, 'HTML')
                              msg = ''
-                if 'Restarted successfully!' in msg and cid == chat_id:
+                if 'MuatUlang Selesai!' in msg and cid == chat_id:
                      bot.editMessageText(msg, chat_id, msg_id, parse_mode='HTMl', disable_web_page_preview=True)
                      osremove(".restartmsg")
                 else:
@@ -234,7 +263,7 @@ def main():
     if ospath.isfile(".restartmsg"):
         with open(".restartmsg") as f:
             chat_id, msg_id = map(int, f)
-        bot.edit_message_text("Restarted successfully!", chat_id, msg_id)
+        bot.edit_message_text("MuatUlang Selesai!", chat_id, msg_id)
         osremove(".restartmsg")
 
     start_handler = CommandHandler(BotCommands.StartCommand, start, run_async=True)
@@ -259,10 +288,5 @@ def main():
 
 main()
 app.start()
-
-if USER_SESSION_STRING:
-    app_session.run()
-else:
-    pass
 
 main_loop.run_forever()
