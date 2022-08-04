@@ -193,7 +193,7 @@ class MirrorListener:
             except Exception as e:
                 LOGGER.error(str(e))
             count = len(download_dict)
-        msg = f"{self.tag} your download has been stopped due to: {error}"
+        msg = f"{self.tag} Downloadmu berhenti karena {error}"
         sendMessage(msg, self.bot, self.message)
         if count == 0:
             self.clean()
@@ -218,19 +218,19 @@ class MirrorListener:
                     pass
         if not self.isPrivate and INCOMPLETE_TASK_NOTIFIER and DB_URI is not None:
             DbManger().rm_complete_task(self.message.link)
-        msg = f"<b>Name: </b><code>{escape(name)}</code>\n\n<b>Size: </b>{size}"
+        msg = f"<b>Nama: </b><code>{escape(name)}</code>\n\n<b> ↳Ukuran: </b>{size}"
         if self.isLeech:
             if SOURCE_LINK is True:
                 try:
                     source_link = message_args[1]
                     if is_magnet(source_link):
                         link = telegraph.create_page(
-                        title='Helios-Mirror Source Link',
+                        title='LINK DATABASE',
                         content=source_link,
                     )["path"]
-                        buttons.buildbutton(f"🔗 Source Link", f"https://telegra.ph/{link}")
+                        buttons.buildbutton(f"🔗 Link Web", f"https://telegra.ph/{link}")
                     else:
-                        buttons.buildbutton(f"🔗 Source Link", source_link)
+                        buttons.buildbutton(f"🔗 Link Web", source_link)
                 except Exception as e:
                     LOGGER.warning(e)
                 pass
@@ -241,7 +241,7 @@ class MirrorListener:
                             source_link = reply_text.strip()
                             if is_magnet(source_link):
                                 link = telegraph.create_page(
-                                    title='Helios-Mirror Source Link',
+                                    title='Budy Gamer Link web',
                                     content=source_link,
                                 )["path"]
                                 buttons.buildbutton(f"🔗 Source Link", f"https://telegra.ph/{link}")
@@ -254,11 +254,11 @@ class MirrorListener:
                 bot_d = bot.get_me()
                 b_uname = bot_d.username
                 botstart = f"http://t.me/{b_uname}"
-                buttons.buildbutton("View file in PM", f"{botstart}")
-            msg += f'\n<b>Total Files: </b>{folders}'
+                buttons.buildbutton("Cek PM", f"{botstart}")
+            msg += f'\n<b>> ↳Files: </b>{folders}'
             if typ != 0:
-                msg += f'\n<b>Corrupted Files: </b>{typ}'
-            msg += f'\n<b>cc: </b>{self.tag}\n\n'
+                msg += f'\n<b>File Gagal: </b>{typ}'
+            msg += f'\n\n<b>User: </b>{self.tag}'
             if not files:
                 uploadmsg = sendMessage(msg, self.bot, self.message)
             else:
@@ -273,23 +273,23 @@ class MirrorListener:
                     uploadmsg = sendMarkup(msg + fmsg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
                     Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
         else:
-            msg += f'\n\n<b>Type: </b>{typ}'
+            msg += f'\n<b> ↳Type: </b>{typ}'
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
-                msg += f'\n<b>SubFolders: </b>{folders}'
-                msg += f'\n<b>Files: </b>{files}'
-            msg += f"\n\n<b>Elapsed Time:</b> {get_readable_time(time() - self.elapsed_time)}"
-            msg += f'\n\n<b>cc: </b>{self.tag}'
+                msg += f'\n<b> ↳Folders: </b>{folders}'
+                msg += f'\n<b> ↳Files: </b>{files}'
+            msg += f"\n<b>Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}"
+            msg += f'\n\n<b>User: </b>{self.tag}'
             buttons = ButtonMaker()
-            buttons.buildbutton("☁️ Drive Link", link)
+            buttons.buildbutton("Link Gdrive", link)
             LOGGER.info(f'Done Uploading {name}')
             if INDEX_URL is not None:
                 url_path = rutils.quote(f'{name}')
                 share_url = f'{INDEX_URL}/{url_path}'
                 if ospath.isdir(f'{DOWNLOAD_DIR}/{self.uid}/{name}'):
                     share_url += '/'
-                    buttons.buildbutton("⚡ Index Link", share_url)
+                    buttons.buildbutton("Link Cepat", share_url)
                 else:
-                    buttons.buildbutton("⚡ Index Link", share_url)
+                    buttons.buildbutton("Link Cepat", share_url)
                     if VIEW_LINK:
                         share_urls = f'{INDEX_URL}/{url_path}?a=view'
                         buttons.buildbutton("🌐 View Link", share_urls)
@@ -304,16 +304,16 @@ class MirrorListener:
                     mesg = message_args[1]
                     if is_magnet(mesg):
                         link = telegraph.create_page(
-                            title='Helios-Mirror Source Link',
+                            title='DATABASE LINK',
                             content=mesg,
                         )["path"]
-                        buttons.buildbutton(f"🔗 Source Link", f"https://telegra.ph/{link}")
+                        buttons.buildbutton(f"🔗 Link web", f"https://telegra.ph/{link}")
                     elif is_url(mesg):
                         source_link = mesg
                         if source_link.startswith(("|", "pswd: ")):
                             pass
                         else:
-                            buttons.buildbutton(f"🔗 Source Link", source_link)
+                            buttons.buildbutton(f"🔗 Link web", source_link)
                     else:
                         pass
                 except Exception as e:
@@ -326,18 +326,18 @@ class MirrorListener:
                         source_link = reply_text.strip()
                         if is_magnet(source_link):
                             link = telegraph.create_page(
-                                title='Helios-Mirror Source Link',
+                                title='DATABASE Link',
                                 content=source_link,
                             )["path"]
-                            buttons.buildbutton(f"🔗 Source Link", f"https://telegra.ph/{link}")
+                            buttons.buildbutton(f"🔗 Link web", f"https://telegra.ph/{link}")
                         else:
-                            buttons.buildbutton(f"🔗 Source Link", source_link)
+                            buttons.buildbutton(f"🔗 Link web", source_link)
                 except Exception as e:
                     LOGGER.warning(e)
                     pass
             else:
                 pass
-            balas = f"<code>{escape(name)}</code>\n\n<b>Lama Download: </b>{get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
+            balas = f"<code>{escape(name)}</code>\n\n<b>Lama Prosee: </b>{get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
             balas += f' / <a href="https://t.me/+GTGd4_M68w0wZmJl">LOG DOWNLOAD</a>'
             sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
@@ -398,7 +398,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
     buttons = ButtonMaker()
     if BOT_PM and message.chat.type != 'private':
         try:
-            msg1 = f'Added your Requested link to Download\n'
+            msg1 = f'Tambah link yg mau di Download\n'
             send = bot.sendMessage(message.from_user.id, text=msg1)
             send.delete()
         except Exception as e:
@@ -407,14 +407,14 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
             b_uname = bot_d.username
             uname = f'<a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>'
             botstart = f"http://t.me/{b_uname}"
-            buttons.buildbutton("Click Here to Start Me", f"{botstart}")
-            startwarn = f"Dear {uname},\n\n<b>I found that you haven't started me in PM (Private Chat) yet.</b>\n\n" \
-                        f"From now on i will give link and leeched files in PM and log channel only"
+            buttons.buildbutton("Klik Start dlu", f"{botstart}")
+            startwarn = f"Dear {uname},\n\n<b>Klik Start di PM dulu (Private Chat).</b>\n\n" \
+                        f"Sekarang File dikirim leeat PM dan LOG DOWNLOAD"
             message = sendMarkup(startwarn, bot, message, InlineKeyboardMarkup(buttons.build_menu(2)))
             Thread(target=auto_delete_message, args=(bot, message, message)).start()
             return
     if message.chat.type == 'private' and len(LEECH_LOG) == 0 and isLeech and MAX_LEECH_SIZE == 4194304000:
-        text = f"Leech Log is Empty you Can't use bot in PM,\nYou Can use <i>/{BotCommands.AddleechlogCommand} chat_id </i> to add leech log."
+        text = f"Leech Log is kosong kamu tidak bisa pake bot di PM,\nKamu bisa pake <i>/{BotCommands.AddleechlogCommand} chat_id </i> untuk tambah ke leech log."
         sendMessage(text, bot, message)
         return
     mesg = message.text.split('\n')
@@ -493,16 +493,16 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 link = file.get_file().file_path
 
     if not is_url(link) and not is_magnet(link) and not ospath.exists(link):
-        help_msg = "<b>Send link along with command line:</b>"
-        help_msg += "\n<code>/command</code> {link} |newname pswd: xx [zip/unzip]"
-        help_msg += "\n\n<b>By replying to link or file:</b>"
-        help_msg += "\n<code>/command</code> |newname pswd: xx [zip/unzip]"
-        help_msg += "\n\n<b>Direct link authorization:</b>"
-        help_msg += "\n<code>/command</code> {link} |newname pswd: xx\nusername\npassword"
-        help_msg += "\n\n<b>Qbittorrent selection:</b>"
-        help_msg += "\n<code>/qbcommand</code> <b>s</b> {link} or by replying to {file/link}"
-        help_msg += "\n\n<b>Multi links only by replying to first link or file:</b>"
-        help_msg += "\n<code>/command</code> 10(number of links/files)"
+        help_msg = "<b>Kirim link disertai Perintah:</b>"
+        help_msg += "\n<code>/command</code> {link} |NamaBaru pswd: xx [zip/unzip]"
+        help_msg += "\n\n<b>Dengan balas link atau file:</b>"
+        help_msg += "\n<code>/command</code> |NamaBaru pswd: xx [zip/unzip]"
+        help_msg += "\n\n<b>Direct link diijinkan:</b>"
+        help_msg += "\n<code>/command</code> {link} |NamaBaru pswd: xx\nusernamemu\npasswordmu"
+        help_msg += "\n\n<b>Memilih di Qbittorrent:</b>"
+        help_msg += "\n<code>/qbcommand</code> <b>s</b> {link} atau dengan balas ke {file/link}"
+        help_msg += "\n\n<b>Multi links hanya dengan balas ke link atau file pertama:</b>"
+        help_msg += "\n<code>/command</code> 10(jumlah links/files)"
         return sendMessage(help_msg, bot, message)
 
     LOGGER.info(link)
@@ -524,9 +524,9 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
 
     if is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
-            gmsg = f"Use /{BotCommands.CloneCommand} to clone Google Drive file/folder\n\n"
-            gmsg += f"Use /{BotCommands.ZipMirrorCommand} to make zip of Google Drive folder\n\n"
-            gmsg += f"Use /{BotCommands.UnzipMirrorCommand} to extracts Google Drive archive file"
+            gmsg = f"Use /{BotCommands.CloneCommand} untuk salin file/folder Google Drive \n\n"
+            gmsg += f"Use /{BotCommands.ZipMirrorCommand} untuk buat format zip ke Google Drive \n\n"
+            gmsg += f"Use /{BotCommands.UnzipMirrorCommand} untuk ekstak file arsip ke Google Drive "
             sendMessage(gmsg, bot, message)
         else:
             Thread(target=add_gd_download, args=(link, listener, is_gdtot)).start()
@@ -534,7 +534,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         if MEGA_KEY is not None:
             Thread(target=MegaDownloader(listener).add_download, args=(link, f'{DOWNLOAD_DIR}{listener.uid}/')).start()
         else:
-            sendMessage('MEGA_API_KEY not Provided!', bot, message)
+            sendMessage('MEGA tidak diijinkan!', bot, message)
     elif isQbit:
         Thread(target=QbDownloader(listener).add_qb_torrent, args=(link, f'{DOWNLOAD_DIR}{listener.uid}', qbitsel)).start()
     else:
