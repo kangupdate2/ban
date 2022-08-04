@@ -144,7 +144,7 @@ def get_readable_message():
                 else:
                     msg += f"\n<b>↳🚦TerDownload:</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                 msg += f"\n<b>↳⚡️Spd:</b> {download.speed()} | <b>⏰Est:</b> {download.eta()}"
-                msg += f"\n<b>Lama Proses: </b>{get_readable_time(time() - download.message.date.timestamp())}"
+                msg += f"\n<b>Lama Proses: </b>{get_readable_time2(time() - download.message.date.timestamp())}"
                 msg += f"\n<b>Modul:</b> {download.eng()}"
                 try:
                     msg += f"\n<b>Seeders:</b> {download.aria_download().num_seeders}" \
@@ -221,6 +221,24 @@ def turn(data):
         return False
 
 def get_readable_time(seconds: int) -> str:
+    result = ''
+    (days, remainder) = divmod(seconds, 86400)
+    days = int(days)
+    if days != 0:
+        result += f'{days}Hari'
+    (hours, remainder) = divmod(remainder, 3600)
+    hours = int(hours)
+    if hours != 0:
+        result += f'{hours}Jam'
+    (minutes, seconds) = divmod(remainder, 60)
+    minutes = int(minutes)
+    if minutes != 0:
+        result += f'{minutes}Menit'
+    seconds = int(seconds)
+    result += f'{seconds}Detik'
+    return result
+
+def get_readable_time2(seconds: int) -> str:
     result = ''
     (days, remainder) = divmod(seconds, 86400)
     days = int(days)
