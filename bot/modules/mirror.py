@@ -258,8 +258,8 @@ class MirrorListener:
             msg += f'\n<b> ↳Files: </b>{folders}'
             if typ != 0:
                 msg += f'\n<b>File Gagal: </b>{typ}'
-            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}"
-            msg += f'\n\n<b>User: </b>{self.tag}'
+            msg += f"\n<b> ↳Lama Proses:</b> {get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
+            msg += f' / <a href="https://t.me/+GTGd4_M68w0wZmJl">LOG TELEFILE</a>'
             if not files:
                 uploadmsg = sendMessage(msg, self.bot, self.message)
             else:
@@ -339,7 +339,7 @@ class MirrorListener:
             else:
                 pass
             balas = f"<code>{escape(name)}</code>\n\n<b>Lama Proses: </b>{get_readable_time(time() - self.elapsed_time)}\nCekPM {self.tag}"
-            balas += f' / <a href="https://t.me/+GTGd4_M68w0wZmJl">LOG DOWNLOAD</a>'
+            balas += f' / <a href="https://t.me/+ERfZJxvVNzA5MjZl">LOG DOWNLOAD</a>'
             sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
             Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
