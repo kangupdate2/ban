@@ -159,7 +159,7 @@ def get_readable_message():
                 if download.message.chat.type != 'private':
                     try:
                         chatid = str(download.message.chat.id)[4:]
-                        msg += f'\n<b>User: </b><a href="https://t.me/c/{chatid}/{download.message.message_id}">{download.message.from_user.first_name}</a> | <b>ID :</b> <code>{download.message.from_user.id}</code>'
+                        msg += f'\n<b>User: </b><a href="https://t.me/c/{chatid}/{download.message.message_id}">{download.message.from_user.first_name}</a> | <b>ID:</b> <code>{download.message.from_user.id}</code>'
                     except:
                         pass
                 else:
@@ -344,9 +344,8 @@ def bot_sys_stats():
                 num_extract += 1
        if stats.status() == MirrorStatus.STATUS_SPLITTING:
                 num_split += 1
-    stats = f"""
-Mod by Budy Gamer
-AKTIFKERJA BOT: {currentTime}\n
+    stats = f""" 
+Budy Gamer : {currentTime}\n
 CPU : {cpu}% || RAM : {mem_p}%\n
 USED : {used} || FREE :{free}
 SENT : {sent} || RECV : {recv}\n
