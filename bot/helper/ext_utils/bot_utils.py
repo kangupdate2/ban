@@ -317,7 +317,7 @@ def pop_up_stats(update, context):
     stats = bot_sys_stats()
     query.answer(text=stats, show_alert=True)
 def bot_sys_stats():
-    currentTime = get_readable_time(time() - botStartTime)
+    currentTime = get_readable_time2(time() - botStartTime)
     cpu = cpu_percent(interval=0.5)
     memory = virtual_memory()
     mem_p = memory.percent
