@@ -213,30 +213,30 @@ input[type="submit"]:hover, input[type="submit"]:focus{
 </style>
 </head>
 <body>
-  <!--© Designed and coded by @bipuldey19-Telegram-->
+  <!--© Designed and coded by Budy Gamer-->
     <header>
       <div class="brand">
         <img
           src="https://telegra.ph/file/cc06d0c613491080cc174.png"
           alt="logo"
         />
-        <a href="https://t.me/anas_tayyar">
-          <h2 class="name">Qbittorrent Selection</h2>
+        <a href="https://t.me/kangsalin">
+          <h2 class="name">Qbittorrent Seleksi file</h2>
         </a>
       </div>
       <div class="social">
-        <a href="https://www.github.com/anasty17/mirror-leech-telegram-bot"><i class="fab fa-github"></i></a>
-        <a href="https://t.me/anas_tayyar"><i class="fab fa-telegram"></i></a>
+        <a href="https://www.github.com/"><i class="fab fa-github"></i></a>
+        <a href="https://t.me/kangsalin"><i class="fab fa-telegram"></i></a>
       </div>
     </header>
     <div id="sticks">
-        <h4>Selected files: <b id="checked_files">0</b> of <b id="total_files">0</b></h4>
-        <h4>Selected files size: <b id="checked_size">0</b> of <b id="total_size">0</b></h4>
+        <h4>File diseleksi: <b id="checked_files">0</b> dari <b id="total_files">0</b></h4>
+        <h4>Ukuran File diseleksi: <b id="checked_size">0</b> dari <b id="total_size">0</b></h4>
     </div>
       <section>
       <form action="{form_url}" method="POST">
        {My_content}
-       <input type="submit" name="Select these files ;)">
+       <input type="submit" name="Filenya dipilih ;)">
       </form>
     </section>
 
@@ -605,20 +605,20 @@ section span{
     </style>
   </head>
 <body>
-   <!--© Designed and coded by @bipuldey19-Telegram-->
+   <!--© Designed and coded by Budy Gamer-->
     <header>
       <div class="brand">
         <img
           src="https://telegra.ph/file/cc06d0c613491080cc174.png"
           alt="logo"
         />
-        <a href="https://t.me/anas_tayyar">
-          <h2 class="name">Qbittorrent Selection</h2>
+        <a href="https://t.me/kangsalin">
+          <h2 class="name">Qbittorrent Seleksi file</h2>
         </a>
       </div>
       <div class="social">
-        <a href="https://www.github.com/anasty17/mirror-leech-telegram-bot"><i class="fab fa-github"></i></a>
-        <a href="https://t.me/anas_tayyar"><i class="fab fa-telegram"></i></a>
+        <a href="https://www.github.com/"><i class="fab fa-github"></i></a>
+        <a href="https://t.me/kangsalin"><i class="fab fa-telegram"></i></a>
       </div>
     </header>
     <section>
@@ -628,13 +628,13 @@ section span{
           <input
             type="text"
             name="pin_code"
-            placeholder="Enter the code that you have got from Telegram to access the Torrent"
+            placeholder="Masukan kode yg di dapatkan ditelegram"
           />
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">SELESAI</button>
       </form>
           <span
-            >* Dont mess around. Your download will get messed up.</
+            >* Jgn asal , ntar downloadnya eror.</
           >
     </section>
 </body>
@@ -753,11 +753,11 @@ def set_priority(hash_id):
 
 @app.route('/')
 def homepage():
-    return "<h1>See mirror-leech-telegram-bot <a href='https://www.github.com/anasty17/mirror-leech-telegram-bot'>@GitHub</a> By <a href='https://github.com/anasty17'>Anas</a></h1>"
+    return "<h1>Tutor di grub <a href='https://www.github.com/'>@GitHub</a> By <a href='https://github.com/'>Budy</a></h1>"
 
 @app.errorhandler(NotFound404Error)
 def page_not_found(e):
-    return "<h1>404: Torrent not found. Mostly wrong hash input</h2>", 404
+    return "<h1>404: Torrent eror, ada yg bermasalah. Periksa lagi! </h2>", 404
 
 if __name__ == "__main__":
     app.run()
