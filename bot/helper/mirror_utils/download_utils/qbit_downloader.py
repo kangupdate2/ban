@@ -45,12 +45,12 @@ class QbDownloader:
                         if len(tor_info) > 0:
                             break
                         elif time() - self.__stalled_time >= 12:
-                            msg = "This Torrent already added or not a torrent. If something wrong please report."
+                            msg = "Torrent sudah di tambah atau bukan file torrent. Jika ada yg salah cek petunjuk bantuan."
                             sendMessage(msg, self.__listener.bot, self.__listener.message)
                             self.client.auth_log_out()
                             return
             else:
-                sendMessage("This is an unsupported/invalid link.", self.__listener.bot, self.__listener.message)
+                sendMessage("link tidak support atau bermasalah!.", self.__listener.bot, self.__listener.message)
                 self.client.auth_log_out()
                 return
             tor_info = tor_info[0]
@@ -63,7 +63,7 @@ class QbDownloader:
             self.periodic = setInterval(self.POLLING_INTERVAL, self.__qb_listener)
             if BASE_URL is not None and select:
                 if link.startswith('magnet:'):
-                    metamsg = "Downloading Metadata, wait then you can select files or mirror torrent file"
+                    metamsg = "Downloading Metadata, tunggu sebentar lagi proses"
                     meta = sendMessage(metamsg, self.__listener.bot, self.__listener.message)
                     while True:
                         tor_info = self.client.torrents_info(torrent_hashes=self.ext_hash)
@@ -86,13 +86,13 @@ class QbDownloader:
                 buttons = button_build.ButtonMaker()
                 gid = self.ext_hash[:12]
                 if WEB_PINCODE:
-                    buttons.buildbutton("Select Files", f"{BASE_URL}/app/files/{self.ext_hash}")
-                    buttons.sbutton("Pincode", f"qbs pin {gid} {pincode}")
+                    buttons.buildbutton("Pilih", f"{BASE_URL}/app/files/{self.ext_hash}")
+                    buttons.sbutton("Pin", f"qbs pin {gid} {pincode}")
                 else:
-                    buttons.buildbutton("Select Files", f"{BASE_URL}/app/files/{self.ext_hash}?pin_code={pincode}")
-                buttons.sbutton("Done Selecting", f"qbs done {gid} {self.ext_hash}")
+                    buttons.buildbutton("Pilih", f"{BASE_URL}/app/files/{self.ext_hash}?pin_code={pincode}")
+                buttons.sbutton("Sudahi Memilih", f"qbs done {gid} {self.ext_hash}")
                 QBBUTTONS = InlineKeyboardMarkup(buttons.build_menu(2))
-                msg = "Your download paused. Choose files then press Done Selecting button to start downloading."
+                msg = "Sedang menunggu. Pilih file lalu tekan tombol sudahi memilih untuk mulai mendownload."
                 sendMarkup(msg, self.__listener.bot, self.__listener.message, QBBUTTONS)
             else:
                 sendStatusMessage(self.__listener.message, self.__listener.bot)
@@ -109,7 +109,7 @@ class QbDownloader:
             if tor_info.state == "metaDL":
                 self.__stalled_time = time()
                 if TORRENT_TIMEOUT is not None and time() - tor_info.added_on >= TORRENT_TIMEOUT:
-                    self.__onDownloadError("Dead Torrent!")
+                    self.__onDownloadError("Torrent Mati!")
             elif tor_info.state == "downloading":
                 self.__stalled_time = time()
                 if not self.__dupChecked and STOP_DUPLICATE and ospath.isdir(f'{self.__path}') and not self.__listener.isLeech:
@@ -127,8 +127,8 @@ class QbDownloader:
                     if qbname is not None:
                         qbmsg, button = GoogleDriveHelper().drive_list(qbname, True)
                         if qbmsg:
-                            self.__onDownloadError("File/Folder is already available in Drive.")
-                            sendMarkup("Here are the search results:", self.__listener.bot, self.__listener.message, button)
+                            self.__onDownloadError("File/Folder sudah ada di dalam Drive.")
+                            sendMarkup("File dalam penyimpanan dari:", self.__listener.bot, self.__listener.message, button)
                     self.__dupChecked = True
                 if not self.__sizeChecked:
                     size = tor_info.size
@@ -136,8 +136,8 @@ class QbDownloader:
                     if STORAGE_THRESHOLD is not None:
                         acpt = check_storage_threshold(size, arch)
                         if not acpt:
-                            msg = f'You must leave {STORAGE_THRESHOLD}GB free storage.'
-                            msg += f'\nYour File/Folder size is {get_readable_file_size(size)}'
+                            msg = f'Kamu harus sisakan {STORAGE_THRESHOLD}GB Penyimpanan kosong.'
+                            msg += f'\nUkuran File/Folder mu: {get_readable_file_size(size)}'
                             self.__onDownloadError(msg)
                             return
                     limit = None
@@ -150,19 +150,19 @@ class QbDownloader:
                     if limit is not None:
                         LOGGER.info('Checking File/Folder Size...')
                         if size > limit * 1024**3:
-                            fmsg = f"{mssg}.\nYour File/Folder size is {get_readable_file_size(size)}"
+                            fmsg = f"{mssg}.\nUkuran File/Folder mu : {get_readable_file_size(size)}"
                             self.__onDownloadError(fmsg)
                     self.__sizeChecked = True
             elif tor_info.state == "stalledDL":
                 if not self.__rechecked and 0.99989999999999999 < tor_info.progress < 1:
-                    msg = f"Force recheck - Name: {self.__name} Hash: "
+                    msg = f"Force recheck - Nama: {self.__name} Hash: "
                     msg += f"{self.ext_hash} Downloaded Bytes: {tor_info.downloaded} "
-                    msg += f"Size: {tor_info.size} Total Size: {tor_info.total_size}"
+                    msg += f"Size: {tor_info.size} Total Ukuran: {tor_info.total_size}"
                     LOGGER.info(msg)
                     self.client.torrents_recheck(torrent_hashes=self.ext_hash)
                     self.__rechecked = True
                 elif TORRENT_TIMEOUT is not None and time() - self.__stalled_time >= TORRENT_TIMEOUT:
-                    self.__onDownloadError("Dead Torrent!")
+                    self.__onDownloadError("Torrent Mati!")
             elif tor_info.state == "missingFiles":
                 self.client.torrents_recheck(torrent_hashes=self.ext_hash)
             elif tor_info.state == "error":
