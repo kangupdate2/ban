@@ -341,6 +341,12 @@ try:
 except:
     RSS_COMMAND = None
 try:
+    FSUB = getConfig('FSUB')
+    FSUB = FSUB.lower() == 'true'
+except:
+    FSUB = False
+    LOGGER.info("Force Subscribe is disabled")
+try:
     CMD_INDEX = getConfig('CMD_INDEX')
     if len(CMD_INDEX) == 0:
         raise KeyError
