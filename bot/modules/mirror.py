@@ -397,6 +397,17 @@ class MirrorListener:
 
 def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=False, pswd=None, multi=0):
     buttons = ButtonMaker()
+    if FSUB:
+        try:
+            uname = message.from_user.mention_html(message.from_user.first_name)
+            user = bot.get_chat_member(RSS_CHAT_ID, message.from_user.id)
+            if user.status not in ['member', 'creator', 'administrator']:
+                buttons.buildbutton("🇬🇧 Join / 🇹🇷 Katıl", f"https://t.me/+GTGd4_M68w0wZmJl}")
+                reply_markup = InlineKeyboardMarkup(buttons.build_menu(1))
+                return sendMarkup(f"<b>Dear {uname}️,\nKamu belum bergabung ke channel.\Bergabung agar <u>Bisa menggunakan bot.</u></b>", bot, message, reply_markup)
+        except Exception as e:
+            LOGGER.info(str(e))
+
     if BOT_PM and message.chat.type != 'private':
         try:
             msg1 = f'Tambah link yg mau di Download\n'
