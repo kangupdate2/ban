@@ -221,7 +221,7 @@ input[type="submit"]:hover, input[type="submit"]:focus{
           alt="logo"
         />
         <a href="https://t.me/kangsalin">
-          <h2 class="name">Qbittorrent Seleksi file</h2>
+          <h2 class="name">Qbittorrent WEB</h2>
         </a>
       </div>
       <div class="social">
@@ -613,7 +613,7 @@ section span{
           alt="logo"
         />
         <a href="https://t.me/kangsalin">
-          <h2 class="name">Qbittorrent Seleksi file</h2>
+          <h2 class="name">Qbittorrent WEB</h2>
         </a>
       </div>
       <div class="social">
