@@ -345,6 +345,7 @@ def bot_sys_stats():
        if stats.status() == MirrorStatus.STATUS_SPLITTING:
                 num_split += 1
     stats = f"""
+Mod by Budy Gamer
 AKTIFKERJA BOT: {currentTime}\n
 CPU : {cpu}% || RAM : {mem_p}%\n
 USED : {used} || FREE :{free}
