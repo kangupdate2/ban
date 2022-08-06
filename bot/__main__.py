@@ -180,7 +180,7 @@ help_string_telegraph = f'''<br>
 # <b>/{BotCommands.AddleechlogCommand}</b>: Tambah Leech Log
 # <br><br>
 # <b>/{BotCommands.RmleechlogCommand}</b>: Hapus Leech Log
- '''
+# '''
 help_string = f'''
 Butuh bantuan, klik tombol Tutorial!!
 '''
