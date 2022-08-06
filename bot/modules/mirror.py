@@ -202,7 +202,7 @@ class MirrorListener:
         if not self.isPrivate and INCOMPLETE_TASK_NOTIFIER and DB_URI is not None:
             DbManger().rm_complete_task(self.message.link)
 
-    def onUploadComplete(self, link: str, update, size, files, folders, typ, name: str):
+    def onUploadComplete(self, link: str, context, update, size, files, folders, typ, name: str):
         buttons = ButtonMaker()
         # this is inspired by def mirror to get the link from message
         mesg = self.message.text.split('\n')
@@ -341,7 +341,7 @@ class MirrorListener:
             balas += f' / <a href="https://t.me/+ERfZJxvVNzA5MjZl">LOG DOWNLOAD</a>'
             sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
-            Thread(target=auto_delete_upload_message, args=(bot, update.message, self.message, uploadmsg)).start()
+            Thread(target=auto_delete_upload_message, args=(bot, context.bot, update.message, self.message, uploadmsg)).start()
             if MIRROR_LOGS:
                 try:
                     for chatid in MIRROR_LOGS:
