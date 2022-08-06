@@ -39,9 +39,9 @@ def getleechinfo(from_user):
 
     button = InlineKeyboardMarkup(buttons.build_menu(1))
 
-    text = f"<u>Leech Settings for <a href='tg://user?id={user_id}'>{name}</a></u>\n"\
-           f"Leech Type <b>{ltype}</b>\n"\
-           f"Custom Thumbnail <b>{thumbmsg}</b>"
+    text = f"<u>Set TELEFILE oleh <a href='tg://user?id={user_id}'>{name}</a></u>\n"\
+           f"Tipe TELEFILE<b>{ltype}</b>\n"\
+           f"Thumbnail Buatan sendiri<b>{thumbmsg}</b>"
     return text, button
 
 def editLeechType(message, query):
@@ -60,14 +60,14 @@ def setLeechType(update, context):
     data = query.data
     data = data.split(" ")
     if user_id != int(data[1]):
-        query.answer(text="Not Yours!", show_alert=True)
+        query.answer(text="Siapa Kamu!", show_alert=True)
     elif data[2] == "doc":
         if user_id in AS_MEDIA_USERS:
             AS_MEDIA_USERS.remove(user_id)
         AS_DOC_USERS.add(user_id)
         if DB_URI is not None:
             DbManger().user_doc(user_id)
-        query.answer(text="Your File Will Deliver As Document!", show_alert=True)
+        query.answer(text="File TELE berbentuk ke Document!", show_alert=True)
         editLeechType(message, query)
     elif data[2] == "med":
         if user_id in AS_DOC_USERS:
@@ -75,7 +75,7 @@ def setLeechType(update, context):
         AS_MEDIA_USERS.add(user_id)
         if DB_URI is not None:
             DbManger().user_media(user_id)
-        query.answer(text="Your File Will Deliver As Media!", show_alert=True)
+        query.answer(text="File TELE berbentuk ke Media!", show_alert=True)
         editLeechType(message, query)
     elif data[2] == "thumb":
         path = f"Thumbnails/{user_id}.jpg"
@@ -111,7 +111,7 @@ def setThumb(update, context):
         msg = f"Custom thumbnail saved for {update.message.from_user.mention_html(update.message.from_user.first_name)}."
         sendMessage(msg, context.bot, update.message)
     else:
-        sendMessage("Reply to a photo to save custom thumbnail.", context.bot, update.message)
+        sendMessage("Reply dengan sebuah foto untuk menyimpan custom thumbnail.", context.bot, update.message)
 
 leech_set_handler = CommandHandler(BotCommands.LeechSetCommand, leechSet, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
 set_thumbnail_handler = CommandHandler(BotCommands.SetThumbCommand, setThumb, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
