@@ -24,7 +24,7 @@ def stats(update, context):
         last_commit = check_output(["git log -1 --date=short --pretty=format:'%cd \n<b>From</b> %cr'"], shell=True).decode()
     else:
         last_commit = 'No UPSTREAM_REPO'
-    currentTime = get_readable_time(time() - botStartTime)
+    currentTime = get_readable_time2(time() - botStartTime)
     total, used, free, disk= disk_usage('/')
     total = get_readable_file_size(total)
     used = get_readable_file_size(used)
@@ -37,7 +37,7 @@ def stats(update, context):
     mem_t = get_readable_file_size(memory.total)
     mem_a = get_readable_file_size(memory.available)
     mem_u = get_readable_file_size(memory.used)
-    stats = f'<b>Commit Date:</b> {last_commit}\n\n'\
+    stats = f'<b>Tanngal Bikin:</b> {last_commit}\n\n'\
             f'<b>Bot AktifKerja:</b> {currentTime}\n\n'\
             f'<b>Total penyimpanan:</b> {total}\n'\
             f'<b>Digunakan:</b> {used} | <b>Kosong:</b> {free}\n\n'\
