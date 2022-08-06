@@ -39,7 +39,7 @@ def getleechinfo(from_user):
 
     button = InlineKeyboardMarkup(buttons.build_menu(1))
 
-    text = f"<u>Set TELEFILE oleh <a href='tg://user?id={user_id}'>{name}</a></u>\n"\
+    text = f"<u>Atur TELEFILE oleh <a href='tg://user?id={user_id}'>{name}</a></u>\n"\
            f"Tipe TELEFILE<b>{ltype}</b>\n"\
            f"Thumbnail Buatan sendiri<b>{thumbmsg}</b>"
     return text, button
