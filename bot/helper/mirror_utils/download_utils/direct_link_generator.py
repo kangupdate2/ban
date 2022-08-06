@@ -78,21 +78,30 @@ def direct_link_generator(link: str):
         raise DirectDownloadLinkException(f'No Direct link function found for {link}')
 
 def zippy_share(url: str) -> str:
-    """ Zippyshare direct link generator
-    Credit https://github/NasiGorengRebus """
-    base_url = re_search('http.+.zippyshare.com', url).group()
-    response = requests.get(url)
-    pages = BeautifulSoup(response.text, "html.parser")
-    js_script = str(pages.find("div", style="margin-left: 24px; margin-top: 20px; text-align: center; width: 303px; height: 105px;"))
+    """ ZippyShare direct links generator
+    Based on https://github.com/KenHV/Mirror-Bot """
+    link = re.findall("https:/.(.*?).zippyshare", url)[0]
+    response_content = (requests.get(url)).content
+    bs_obj = BeautifulSoup(response_content, "lxml")
+
     try:
-        mtk = eval(re_findall(r"\+\((.*?).\+", js_script)[0] + " + 10 + 5/5")
-        uri1 = re_findall(r".href.=.\"/(.*?)/\"", js_script)[0]
-        uri2 = re_findall(r"\)\+\"/(.*?)\"", js_script)[0]
-    except Exception as err:
-        LOGGER.error(err)
-        raise DirectDownloadLinkException("Zippyshare Error!")
-    dl_url = f"{base_url}/{uri1}/{int(mtk)}/{uri2}"
-    return dl_url
+        js_script = bs_obj.find("div", {"class": "center",}).find_all(
+            "script"
+        )[1]
+    except:
+        js_script = bs_obj.find("div", {"class": "right",}).find_all(
+            "script"
+        )[0]
+
+    js_content = re.findall(r'\.href.=."/(.*?)";', str(js_script))
+    js_content = 'var x = "/' + js_content[0] + '"'
+
+    evaljs = EvalJs()
+    setattr(evaljs, "x", None)
+    evaljs.execute(js_content)
+    js_content = getattr(evaljs, "x")
+
+    return f"https://{link}.zippyshare.com{js_content}"
 
 def yandex_disk(url: str) -> str:
     """ Yandex.Disk direct link generator
