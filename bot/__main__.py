@@ -186,7 +186,8 @@ Butuh bantuan, klik tombol Tutorial!!
 '''
 help = telegraph.create_page(
         title='Petunjuk Penggunaan',
-        content=help_string_telegraph + sudo_help_string,
+        content=help_string_telegraph,
+#        content=help_string_telegraph + sudo_help_string,
     )["path"]
 
 def bot_help(update, context):
