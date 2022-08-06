@@ -89,6 +89,16 @@ def ping(update, context):
 def log(update, context):
     sendLogFile(context.bot, update.message)
 
+# <b>/{BotCommands.RssListCommand}</b>: List semua subscribed rss feed info
+# <br><br>
+# <b>/{BotCommands.RssGetCommand}</b>: [Title] [Number](last N links): Force fetch last N links
+# <br><br>
+# <b>/{BotCommands.RssSubCommand}</b>: [Title] [Rss Link] f: [filter]: Subscribe new rss feed
+# <br><br>
+# <b>/{BotCommands.RssUnSubCommand}</b>: [Title]: Unubscribe rss feed by title
+# <br><br>
+# <b>/{BotCommands.RssSettingsCommand}</b>: Rss Settings
+# <br><br>
 
 help_string_telegraph = f'''<br>
 <b>/{BotCommands.MirrorCommand}</b> [download_url][magnet_link]: Memulai penyalinan Ketik <b>/{BotCommands.MirrorCommand}</b> Untuk petunjuk lain.
@@ -103,17 +113,17 @@ help_string_telegraph = f'''<br>
 <br><br>
 <b>/{BotCommands.QbUnzipMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Memulai penyalinan menggunakan qBittorrent and upload file/folder bentuk Arsip lalu diekstrak
 <br><br>
-<b>/{BotCommands.LeechCommand}</b> [download_url][magnet_link]: Mulai leeching ke Telegram, Ketik <b>/{BotCommands.LeechCommand} s</b> untuk memilih file
+<b>/{BotCommands.LeechCommand}</b> [download_url][magnet_link]: Upload ke Telegram, Ketik <b>/{BotCommands.LeechCommand} s</b> untuk memilih file
 <br><br>
-<b>/{BotCommands.ZipLeechCommand}</b> [download_url][magnet_link]: Mulai leeching ke Telegram and upload file/folder dalam bentuk format zip
+<b>/{BotCommands.ZipLeechCommand}</b> [download_url][magnet_link]: Upload file/folder ke Telegram dalam bentuk format zip
 <br><br>
-<b>/{BotCommands.UnzipLeechCommand}</b> [download_url][magnet_link][torent_file] Mulai leeching ke Telegram and upload file/folder bentuk Arsip lalu diekstrak
+<b>/{BotCommands.UnzipLeechCommand}</b> [download_url][magnet_link][torent_file] Upload file/folder ke Telegram berFormat Arsip dan diekstrak
 <br><br>
-<b>/{BotCommands.QbLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Mulai leeching ke Telegram menggunakan qBittorrent, Ketik <b>/{BotCommands.QbLeechCommand} s</b> untuk memilih file
+<b>/{BotCommands.QbLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Upload ke Telegram menggunakan qBittorrent, Ketik <b>/{BotCommands.QbLeechCommand} s</b> untuk memilih file
 <br><br>
-<b>/{BotCommands.QbZipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Mulai leeching ke Telegram menggunakan qBittorrent and upload file/folder dalam bentuk format zip
+<b>/{BotCommands.QbZipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Upload ke Telegram menggunakan qBittorrent dalam bentuk format zip
 <br><br>
-<b>/{BotCommands.QbUnzipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Mulai leeching ke Telegram menggunakan qBittorrent and upload file/folder bentuk Arsip lalu diekstrak
+<b>/{BotCommands.QbUnzipLeechCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Upload ke Telegram menggunakan qBittorrent berFormat Arsip dan diekstrak
 <br><br>
 <b>/{BotCommands.CloneCommand}</b> [drive_url][gdtot_url]: Salin file/folder ke Google Drive
 <br><br>
@@ -129,19 +139,9 @@ help_string_telegraph = f'''<br>
 <br><br>
 <b>/{BotCommands.LeechZipWatchCommand}</b> [yt-dlp supported link]: Leech yt-dlp supported link ke format zip
 <br><br>
-<b>/{BotCommands.LeechSetCommand}</b>: Pengaturan Leech
+<b>/{BotCommands.LeechSetCommand}</b>: Pengaturan upload ke telegram
 <br><br>
 <b>/{BotCommands.SetThumbCommand}</b>: Balas photo untuk diatur sebagai Thumbnail
-<br><br>
-<b>/{BotCommands.RssListCommand}</b>: List semua subscribed rss feed info
-<br><br>
-<b>/{BotCommands.RssGetCommand}</b>: [Title] [Number](last N links): Force fetch last N links
-<br><br>
-<b>/{BotCommands.RssSubCommand}</b>: [Title] [Rss Link] f: [filter]: Subscribe new rss feed
-<br><br>
-<b>/{BotCommands.RssUnSubCommand}</b>: [Title]: Unubscribe rss feed by title
-<br><br>
-<b>/{BotCommands.RssSettingsCommand}</b>: Rss Settings
 <br><br>
 <b>/{BotCommands.CancelMirror}</b>: Reply to the message by which the download was initiated and that download will be cancelled
 <br><br>
@@ -156,32 +156,31 @@ help_string_telegraph = f'''<br>
 <b>/{BotCommands.StatsCommand}</b>: Tunjukan status Bot
 '''
 
-
-sudo_help_string = f'''<br><br><b> Sudo/Owner Only </b><br><br>
-<b>/{BotCommands.PingCommand}</b>: Cek ping Bot
-<br><br>
-<b>/{BotCommands.AuthorizeCommand}</b>: diijinkan admin ( only Owner & Sudo )
-<br><br>
-<b>/{BotCommands.UnAuthorizeCommand}</b>: Ijin Dilepas admin ( only Owner & Sudo )
-<br><br>
-<b>/{BotCommands.AuthorizedUsersCommand}</b>: User yang diijinkan (Only Owner & Sudo)
-<br><br>
-<b>/{BotCommands.AddSudoCommand}</b>: tambah sudo user (Only Owner)
-<br><br>
-<b>/{BotCommands.RmSudoCommand}</b>: Hapus sudo users (Only Owner)
-<br><br>
-<b>/{BotCommands.RestartCommand}</b>: Restart bot
-<br><br>
-<b>/{BotCommands.LogCommand}</b>: Log file
-<br><br>
-<b>/{BotCommands.ShellCommand}</b>: Program Shell (Only Owner)
-<br><br>
-<b>/{BotCommands.ExecHelpCommand}</b>: Executor module (Only Owner)
-<br><br>
-<b>/{BotCommands.AddleechlogCommand}</b>: Tambah Leech Log
-<br><br>
-<b>/{BotCommands.RmleechlogCommand}</b>: Hapus Leech Log
-'''
+# sudo_help_string = f'''<br><br><b> Sudo/Owner Only </b><br><br>
+# <b>/{BotCommands.PingCommand}</b>: Cek ping Bot
+# <br><br>
+# <b>/{BotCommands.AuthorizeCommand}</b>: diijinkan admin ( only Owner & Sudo )
+# <br><br>
+# <b>/{BotCommands.UnAuthorizeCommand}</b>: Ijin Dilepas admin ( only Owner & Sudo )
+# <br><br>
+# <b>/{BotCommands.AuthorizedUsersCommand}</b>: User yang diijinkan (Only Owner & Sudo)
+# <br><br>
+# <b>/{BotCommands.AddSudoCommand}</b>: tambah sudo user (Only Owner)
+# <br><br>
+# <b>/{BotCommands.RmSudoCommand}</b>: Hapus sudo users (Only Owner)
+# <br><br>
+# <b>/{BotCommands.RestartCommand}</b>: Restart bot
+# <br><br>
+# <b>/{BotCommands.LogCommand}</b>: Log file
+# <br><br>
+#<b>/{BotCommands.ShellCommand}</b>: Program Shell (Only Owner)
+# <br><br>
+# <b>/{BotCommands.ExecHelpCommand}</b>: Executor module (Only Owner)
+# <br><br>
+# <b>/{BotCommands.AddleechlogCommand}</b>: Tambah Leech Log
+# <br><br>
+# <b>/{BotCommands.RmleechlogCommand}</b>: Hapus Leech Log
+ '''
 help_string = f'''
 Butuh bantuan, klik tombol Tutorial!!
 '''
