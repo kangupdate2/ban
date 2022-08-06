@@ -504,16 +504,16 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 link = file.get_file().file_path
 
     if not is_url(link) and not is_magnet(link) and not ospath.exists(link):
-        help_msg = "<b>Kirim link disertai /{BotCommands.MirrorCommand}</b>"
-        help_msg += "\n<code>/{BotCommands.MirrorCommand}</code> {link} |NamaBaru pswd: xx [zip/unzip]"
-        help_msg += "\n\n<b>Dengan balas link atau file</b>"
-        help_msg += "\n<code>/{BotCommands.MirrorCommand}</code> |NamaBaru pswd: xx [zip/unzip]"
-        help_msg += "\n\n<b>Direct link diijinkan:</b>"
-        help_msg += "\n<code>/{BotCommands.MirrorCommand}</code> {link} |NamaBaru pswd: xx\nusernamemu\npasswordmu"
-        help_msg += "\n\n<b>Memilih di Qbittorrent:</b>"
-        help_msg += "\n<code>/{BotCommands.QbMirrorCommand}</code> <b>s</b> {link} atau dengan balas ke {file/link}"
-        help_msg += "\n\n<b>Multi links hanya dengan balas ke link atau file pertama:</b>"
-        help_msg += "\n<code>/command</code> 10(jumlah links/files)"
+        help_msg = f"<b>Kirim link disertai /{BotCommands.MirrorCommand}</b>"
+        help_msg += f"\n<code>/{BotCommands.MirrorCommand}</code> {link} |NamaBaru pswd: xx [zip/unzip]"
+        help_msg += f"\n\n<b>Dengan balas link atau file</b>"
+        help_msg += f"\n<code>/{BotCommands.MirrorCommand}</code> |NamaBaru pswd: xx [zip/unzip]"
+        help_msg += f"\n\n<b>Direct link diijinkan:</b>"
+        help_msg += f"\n<code>/{BotCommands.MirrorCommand}</code> {link} |NamaBaru pswd: xx\nusernamemu\npasswordmu"
+        help_msg += f"\n\n<b>Memilih di Qbittorrent:</b>"
+        help_msg += f"\n<code>/{BotCommands.QbMirrorCommand}</code> <b>s</b> {link} atau dengan balas ke {file/link}"
+        help_msg += f"\n\n<b>Multi links hanya dengan balas ke link atau file pertama:</b>"
+        help_msg += f"\n\n<code>/{BotCommands.HelpCommand}</code> untuk petunjuk lebih lanjut."
         return sendMessage(help_msg, bot, message)
 
     LOGGER.info(link)
