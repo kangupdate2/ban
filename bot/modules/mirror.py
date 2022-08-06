@@ -202,7 +202,7 @@ class MirrorListener:
         if not self.isPrivate and INCOMPLETE_TASK_NOTIFIER and DB_URI is not None:
             DbManger().rm_complete_task(self.message.link)
 
-    def onUploadComplete(self, link: str, size, files, folders, typ, name: str):
+    def onUploadComplete(self, link: str, update, size, files, folders, typ, name: str):
         buttons = ButtonMaker()
         # this is inspired by def mirror to get the link from message
         mesg = self.message.text.split('\n')
