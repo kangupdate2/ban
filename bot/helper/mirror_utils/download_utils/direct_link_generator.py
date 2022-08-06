@@ -19,6 +19,7 @@ from bs4 import BeautifulSoup
 from base64 import standard_b64encode
 from lxml import etree
 import re
+import requests
 from js2py import EvalJs
 
 from bot import LOGGER, UPTOBOX_TOKEN, CRYPT, APPDRIVE_EMAIL, APPDRIVE_PASS
