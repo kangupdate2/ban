@@ -504,14 +504,14 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 link = file.get_file().file_path
 
     if not is_url(link) and not is_magnet(link) and not ospath.exists(link):
-        help_msg = "<b>Kirim link disertai Perintah:</b>"
-        help_msg += "\n<code>/command</code> {link} |NamaBaru pswd: xx [zip/unzip]"
-        help_msg += "\n\n<b>Dengan balas link atau file:</b>"
-        help_msg += "\n<code>/command</code> |NamaBaru pswd: xx [zip/unzip]"
+        help_msg = "<b>Kirim link disertai /{BotCommands.MirrorCommand}</b>"
+        help_msg += "\n<code>/{BotCommands.MirrorCommand}</code> {link} |NamaBaru pswd: xx [zip/unzip]"
+        help_msg += "\n\n<b>Dengan balas link atau file</b>"
+        help_msg += "\n<code>/{BotCommands.MirrorCommand}</code> |NamaBaru pswd: xx [zip/unzip]"
         help_msg += "\n\n<b>Direct link diijinkan:</b>"
-        help_msg += "\n<code>/command</code> {link} |NamaBaru pswd: xx\nusernamemu\npasswordmu"
+        help_msg += "\n<code>/{BotCommands.MirrorCommand}</code> {link} |NamaBaru pswd: xx\nusernamemu\npasswordmu"
         help_msg += "\n\n<b>Memilih di Qbittorrent:</b>"
-        help_msg += "\n<code>/qbcommand</code> <b>s</b> {link} atau dengan balas ke {file/link}"
+        help_msg += "\n<code>/{BotCommands.QbMirrorCommand}</code> <b>s</b> {link} atau dengan balas ke {file/link}"
         help_msg += "\n\n<b>Multi links hanya dengan balas ke link atau file pertama:</b>"
         help_msg += "\n<code>/command</code> 10(jumlah links/files)"
         return sendMessage(help_msg, bot, message)
@@ -535,9 +535,9 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
 
     if is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
-            gmsg = f"Use /{BotCommands.CloneCommand} untuk salin file/folder Google Drive \n\n"
-            gmsg += f"Use /{BotCommands.ZipMirrorCommand} untuk buat format zip ke Google Drive \n\n"
-            gmsg += f"Use /{BotCommands.UnzipMirrorCommand} untuk ekstak file arsip ke Google Drive "
+            gmsg = f"Ketik /{BotCommands.CloneCommand} untuk salin file/folder Google Drive \n\n"
+            gmsg += f"Ketik /{BotCommands.ZipMirrorCommand} untuk buat format zip ke Google Drive \n\n"
+            gmsg += f"Ketik /{BotCommands.UnzipMirrorCommand} untuk ekstak file arsip ke Google Drive "
             sendMessage(gmsg, bot, message)
         else:
             Thread(target=add_gd_download, args=(link, listener, is_gdtot)).start()
