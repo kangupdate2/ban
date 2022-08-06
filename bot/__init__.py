@@ -36,7 +36,7 @@ try:
     try:
         res = rget(CONFIG_FILE_URL)
         if res.status_code == 200:
-            with open('config.env', 'wb+') as f:
+            with open('config2.env', 'wb+') as f:
                 f.write(res.content)
         else:
             log_error(f"Failed to download config.env {res.status_code}")
