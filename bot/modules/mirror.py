@@ -341,7 +341,7 @@ class MirrorListener:
             balas += f' / <a href="https://t.me/+ERfZJxvVNzA5MjZl">LOG DOWNLOAD</a>'
             sendMessage(balas, self.bot, self.message)
             uploadmsg = sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
-            Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
+            Thread(target=auto_delete_upload_message, args=(bot, update.message, self.message, uploadmsg)).start()
             if MIRROR_LOGS:
                 try:
                     for chatid in MIRROR_LOGS:
