@@ -118,6 +118,17 @@ def get_progress_bar_string(status):
     p_str = f"|{p_str}|"
     return p_str
 
+def get_progress_bar_string2(status):
+    completed = virtual_memory().percent / 8
+    total = 100 / 8
+    p = 0 if total == 0 else round(completed * 100 / total)
+    p = min(max(p, 0), 100)
+    cFull = p // 8
+    p_str = '🟩' * cFull
+    p_str += '▇' * (12 - cFull)
+    p_str = f"|{p_str}|"
+    return p_str
+
 def get_readable_message():
     with download_dict_lock:
         msg = ""
@@ -317,7 +328,8 @@ def pop_up_stats(update, context):
     stats = bot_sys_stats()
     query.answer(text=stats, show_alert=True)
 def bot_sys_stats():
-    currentTime = get_readable_time2(time() - botStartTime)
+#    currentTime = get_readable_time2(time() - botStartTime)
+    currentTime = getprogress_bar_string2
     cpu = cpu_percent(interval=0.5)
     memory = virtual_memory()
     mem_p = memory.percent
