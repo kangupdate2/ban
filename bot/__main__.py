@@ -37,7 +37,7 @@ def stats(update, context):
     mem_t = get_readable_file_size(memory.total)
     mem_a = get_readable_file_size(memory.available)
     mem_u = get_readable_file_size(memory.used)
-    stats = f'<b>Tanngal Bikin:</b> {last_commit}\n\n'\
+    stats = f'<b>Tanggal Bikin:</b> {last_commit}\n\n'\
             f'<b>Bot AktifKerja:</b> {currentTime}\n\n'\
             f'<b>Total penyimpanan:</b> {total}\n'\
             f'<b>Digunakan:</b> {used} | <b>Kosong:</b> {free}\n\n'\
@@ -55,11 +55,12 @@ def stats(update, context):
 def start(update, context):
     buttons = ButtonMaker()
     buttons.buildbutton("Admin", "https://t.me/+GTGd4_M68w0wZmJl")
-    buttons.buildbutton("Group", "https://t.me/+eMZmUYcvGqJmMWY1")
+    buttons.buildbutton("JOIN", "https://groups.google.com/g/game_download")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
         start_string = f''' 
-Bot yang bisa mirror sesuka hati ke to Google Drive!
+Grub yang bisa mirror sesuka hati ke Google Drive!
+Tekan tombol JOIN untuk bergabung penyimpanan gdrive.
 Ketik /{BotCommands.HelpCommand} untuk petunjuk penggunaan.
 '''
         sendMarkup(start_string, context.bot, update.message, reply_markup)
